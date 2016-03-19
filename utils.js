@@ -153,10 +153,24 @@ function cast(x) {
  * else
  *   v=f;
  **/
-function ifval(b, t, f) {
+function ifVal(b, t, f) {
     if (b)
         return t;
     else
         return f;
+}
+function ifFun(b, fun, v, logError) {
+    if (b === void 0) { b = true; }
+    if (logError === void 0) { logError = false; }
+    if (!b)
+        return v;
+    try {
+        return fun();
+    }
+    catch (e) {
+        if (logError)
+            console.error(e);
+        return v;
+    }
 }
 //# sourceMappingURL=utils.js.map
