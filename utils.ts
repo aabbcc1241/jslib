@@ -145,3 +145,15 @@ function ensure(value:any, allowNull = false, type:string = null) {
 function cast<A>(x:any):A {
   return x;
 }
+
+/* this function is used to replace the case below :
+ * val v;
+ * if(b)
+ *   v=t;
+ * else
+ *   v=f;
+ **/
+function ifval<A>(b:boolean, t:A, f:A) {
+  if (b)return t; else return f;
+}
+

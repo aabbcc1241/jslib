@@ -146,4 +146,17 @@ function ensure(value, allowNull, type) {
 function cast(x) {
     return x;
 }
+/* this function is used to replace the case below :
+ * val v;
+ * if(b)
+ *   v=t;
+ * else
+ *   v=f;
+ **/
+function ifval(b, t, f) {
+    if (b)
+        return t;
+    else
+        return f;
+}
 //# sourceMappingURL=utils.js.map
