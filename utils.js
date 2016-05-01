@@ -176,4 +176,12 @@ function ifFun(b, fun, v, logError) {
 function xor(a, b) {
     return !!(a ^ b);
 }
+function sign(a) {
+    return ifVal(a > 0, 1, ifVal(a < 0, -1, 0));
+}
+function swap(o, a, b) {
+    var t = o[a];
+    o[a] = o[b];
+    o[b] = t;
+}
 //# sourceMappingURL=utils.js.map

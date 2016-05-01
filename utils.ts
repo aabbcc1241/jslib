@@ -171,3 +171,13 @@ function ifFun<A>(b = true, fun:()=>A, v:A, logError = false) {
 function xor(a, b):boolean {
   return !!(a ^ b);
 }
+
+function sign(a:number):number {
+  return ifVal(a > 0, 1, ifVal(a < 0, -1, 0));
+}
+
+function swap(o:any, a, b:string) {
+  var t = o[a];
+  o[a] = o[b];
+  o[b] = t;
+}
