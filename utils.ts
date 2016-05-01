@@ -168,3 +168,6 @@ function ifFun<A>(b = true, fun:()=>A, v:A, logError = false) {
   }
 }
 
+function xor(a, b):boolean {
+  return !!(a ^ b);
+}

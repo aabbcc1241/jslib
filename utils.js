@@ -173,4 +173,7 @@ function ifFun(b, fun, v, logError) {
         return v;
     }
 }
+function xor(a, b) {
+    return !!(a ^ b);
+}
 //# sourceMappingURL=utils.js.map
