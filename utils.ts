@@ -157,7 +157,7 @@ function ifVal<A>(b:boolean, t:A, f:A) {
   if (b)return t; else return f;
 }
 
-function ifFun<A>(b = true, fun:()=>A, v:A, logError = false) {
+function ifFunVal<A>(b = true, fun:()=>A, v:A, logError = false) {
   if (!b)return v;
   try {
     return fun();

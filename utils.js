@@ -159,7 +159,7 @@ function ifVal(b, t, f) {
     else
         return f;
 }
-function ifFun(b, fun, v, logError) {
+function ifFunVal(b, fun, v, logError) {
     if (b === void 0) { b = true; }
     if (logError === void 0) { logError = false; }
     if (!b)
