@@ -184,4 +184,31 @@ function swap(o, a, b) {
     o[a] = o[b];
     o[b] = t;
 }
+var Map = (function () {
+    function Map(initMap) {
+        if (initMap === void 0) { initMap = {}; }
+        this.map = initMap;
+    }
+    Map.prototype.toString = function () {
+        return JSON.stringify(this.map);
+    };
+    Map.prototype.add = function (key, value) {
+        this.map[key] = value;
+        return this;
+    };
+    Map.prototype.get = function (key) {
+        return this.map[key];
+    };
+    Map.prototype.keys = function () {
+        return Object.keys(this.map);
+    };
+    Map.prototype.values = function () {
+        var _this = this;
+        return Object.keys(this.map).map(function (x) { return _this.map[x]; });
+    };
+    Map.prototype.clear = function () {
+        this.map = {};
+    };
+    return Map;
+}());
 //# sourceMappingURL=utils.js.map

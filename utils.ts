@@ -181,3 +181,36 @@ function swap(o:any, a, b:string) {
   o[a] = o[b];
   o[b] = t;
 }
+
+class Map<V> {
+  private map;
+
+  constructor(initMap = {}) {
+    this.map = initMap;
+  }
+
+  toString() {
+    return JSON.stringify(this.map);
+  }
+
+  add(key:string|number, value:V) {
+    this.map[key] = value;
+    return this;
+  }
+
+  get(key:string|any) {
+    return this.map[key];
+  }
+
+  keys() {
+    return Object.keys(this.map);
+  }
+
+  values() {
+    return Object.keys(this.map).map(x=>this.map[x]);
+  }
+
+  clear() {
+    this.map = {}
+  }
+}
