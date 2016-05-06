@@ -214,3 +214,7 @@ class Map<V> {
     this.map = {}
   }
 }
+
+function isNumber(x):boolean {
+  return x == x * 1;
+}

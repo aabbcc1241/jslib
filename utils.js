@@ -211,4 +211,7 @@ var Map = (function () {
     };
     return Map;
 }());
+function isNumber(x) {
+    return x == x * 1;
+}
 //# sourceMappingURL=utils.js.map
