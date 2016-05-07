@@ -214,4 +214,17 @@ var Map = (function () {
 function isNumber(x) {
     return x == x * 1;
 }
+function object_constructor(o) {
+    if (!o)
+        throw new ReferenceError('raw is null/undefined');
+    if (typeof o == "string")
+        o = JSON.parse(o);
+    // console.log('new userprofile', o);
+    for (var x in o) {
+        /* skip number */
+        if (isNumber(x))
+            continue;
+        this[x] = o[x];
+    }
+}
 //# sourceMappingURL=utils.js.map
