@@ -1,13 +1,4 @@
-function toArray(htmlCollection) {
-    return [].slice.call(htmlCollection);
-}
-function pushIfNotExist(arr, o) {
-    if (arr.indexOf(o) == -1) {
-        arr.push(o);
-        return true;
-    }
-    return false;
-}
+var _this = this;
 function objectCopy(src, dest, filter, recursive) {
     if (filter === void 0) { filter = function (key, value) { return true; }; }
     if (recursive === void 0) { recursive = false; }
@@ -25,16 +16,6 @@ function objectCopy(src, dest, filter, recursive) {
                 dest[key] = value;
             }
         }
-    }
-}
-/**@return parentNode if found (only first matched node), false if not found */
-function findParent(node, parentFilter) {
-    for (var parent = node;;) {
-        parent = parent.parentNode;
-        if (parent == null)
-            return false;
-        else if (parentFilter(parent))
-            return parent;
     }
 }
 /**
@@ -74,6 +55,26 @@ function isRadioSelected(radio, container) {
     var radioName = radio.name;
     var selectedRadio = $('input[name=' + radioName + ']:checked', container);
     return radio.value == selectedRadio.val();
+}
+/**@return parentNode if found (only first matched node), false if not found */
+HTMLElement.prototype['findParent'] = function (parentFilter) {
+    for (var parent = _this;;) {
+        parent = parent.parentNode;
+        if (parent == null)
+            return false;
+        else if (parentFilter(parent))
+            return parent;
+    }
+};
+/** @deprecated **/
+function findParent(node, parentFilter) {
+    for (var parent = node;;) {
+        parent = parent.parentNode;
+        if (parent == null)
+            return false;
+        else if (parentFilter(parent))
+            return parent;
+    }
 }
 function object_filter_by_type(obj, type, includeInherit) {
     if (includeInherit === void 0) { includeInherit = true; }
@@ -143,6 +144,28 @@ function ensure(value, allowNull, type) {
         throw new ReferenceError();
 }
 /*    Lang utils    */
+HTMLCollection.prototype['toArray'] = Array.prototype.slice;
+/** @deprecated **/
+function toArray(htmlCollection) {
+    return [].slice.call(htmlCollection);
+}
+Array.prototype['pushIfNotExist'] = function (x) {
+    if (_this.indexOf(x) == -1) {
+        _this.push(x);
+    }
+    return _this;
+};
+/** @deprecated **/
+function pushIfNotExist(arr, o) {
+    if (arr.indexOf(o) == -1) {
+        arr.push(o);
+        return true;
+    }
+    return false;
+}
+// Object.prototype['cast'] = function <A>():A {
+//   return this;
+// };
 function cast(x) {
     return x;
 }

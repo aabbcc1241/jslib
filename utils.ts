@@ -1,17 +1,5 @@
 declare var $:any;
 
-function toArray(htmlCollection) {
-  return [].slice.call(htmlCollection);
-}
-
-function pushIfNotExist(arr:any[], o:any):boolean {
-  if (arr.indexOf(o) == -1) {
-    arr.push(o);
-    return true;
-  }
-  return false;
-}
-
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
   if (src == null || dest == null)
     throw Error('src and dest should not be null');
@@ -26,17 +14,6 @@ function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)
         dest[key] = value;
       }
     }
-  }
-}
-
-/**@return parentNode if found (only first matched node), false if not found */
-function findParent(node, parentFilter) {
-  for (var parent = node; ;) {
-    parent = parent.parentNode;
-    if (parent == null)
-      return false;
-    else if (parentFilter(parent))
-      return parent;
   }
 }
 
@@ -75,6 +52,28 @@ function isRadioSelected(radio:HTMLInputElement, container:HTMLElement|Document 
   var radioName = radio.name;
   var selectedRadio = $('input[name=' + radioName + ']:checked', container);
   return radio.value == selectedRadio.val();
+}
+
+/**@return parentNode if found (only first matched node), false if not found */
+HTMLElement.prototype['findParent'] = (parentFilter)=> {
+  for (var parent = this; ;) {
+    parent = parent.parentNode;
+    if (parent == null)
+      return false;
+    else if (parentFilter(parent))
+      return parent;
+  }
+};
+
+/** @deprecated **/
+function findParent(node, parentFilter) {
+  for (var parent = node; ;) {
+    parent = parent.parentNode;
+    if (parent == null)
+      return false;
+    else if (parentFilter(parent))
+      return parent;
+  }
 }
 
 function object_filter_by_type(obj:any, type:string, includeInherit = true):any[] {
@@ -141,7 +140,33 @@ function ensure(value:any, allowNull = false, type:string = null) {
     throw new ReferenceError();
 }
 
+
 /*    Lang utils    */
+HTMLCollection.prototype['toArray'] = Array.prototype.slice;
+/** @deprecated **/
+function toArray(htmlCollection) {
+  return [].slice.call(htmlCollection);
+}
+
+Array.prototype['pushIfNotExist'] = (x)=> {
+  if (this.indexOf(x) == -1) {
+    this.push(x)
+  }
+  return this;
+};
+/** @deprecated **/
+function pushIfNotExist(arr:any[], o:any):boolean {
+  if (arr.indexOf(o) == -1) {
+    arr.push(o);
+    return true;
+  }
+  return false;
+}
+
+// Object.prototype['cast'] = function <A>():A {
+//   return this;
+// };
+
 function cast<A>(x:any):A {
   return x;
 }
