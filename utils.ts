@@ -163,6 +163,10 @@ function pushIfNotExist(arr:any[], o:any):boolean {
   return false;
 }
 
+Array.prototype['clear'] = function () {
+  this.splice(0, this.length)
+};
+
 // Object.prototype['cast'] = function <A>():A {
 //   return this;
 // };
