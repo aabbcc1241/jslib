@@ -227,11 +227,11 @@ class Map<V> {
     return this;
   }
 
-  get(key:string|any) {
+  get(key:string|number) {
     return this.map[key];
   }
 
-  keys() {
+  keys():(string|number)[] {
     return Object.keys(this.map);
   }
 
