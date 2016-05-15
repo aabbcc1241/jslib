@@ -155,14 +155,6 @@ Array.prototype['pushIfNotExist'] = function (x) {
     }
     return _this;
 };
-/** @deprecated **/
-function pushIfNotExist(arr, o) {
-    if (arr.indexOf(o) == -1) {
-        arr.push(o);
-        return true;
-    }
-    return false;
-}
 Array.prototype['clear'] = function () {
     this.splice(0, this.length);
 };

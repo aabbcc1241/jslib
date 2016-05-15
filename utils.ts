@@ -154,14 +154,6 @@ Array.prototype['pushIfNotExist'] = (x)=> {
   }
   return this;
 };
-/** @deprecated **/
-function pushIfNotExist(arr:any[], o:any):boolean {
-  if (arr.indexOf(o) == -1) {
-    arr.push(o);
-    return true;
-  }
-  return false;
-}
 
 Array.prototype['clear'] = function () {
   this.splice(0, this.length)
