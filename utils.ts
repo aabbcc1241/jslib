@@ -172,6 +172,10 @@ Array.prototype['flatMap'] = function (f:(any)=>any) {
   return this.map(f).flatten();
 };
 
+Array.prototype['count'] = function (f:(any)=>boolean) {
+  return this.collect(f).length;
+};
+
 // Object.prototype['cast'] = function <A>():A {
 //   return this;
 // };
