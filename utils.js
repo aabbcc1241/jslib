@@ -150,10 +150,10 @@ function toArray(htmlCollection) {
     return [].slice.call(htmlCollection);
 }
 Array.prototype['pushIfNotExist'] = function (x) {
-    if (_this.indexOf(x) == -1) {
-        _this.push(x);
+    if (this.indexOf(x) == -1) {
+        this.push(x);
     }
-    return _this;
+    return this;
 };
 Array.prototype['clear'] = function () {
     this.splice(0, this.length);

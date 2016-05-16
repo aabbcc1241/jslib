@@ -148,7 +148,7 @@ function toArray(htmlCollection) {
   return [].slice.call(htmlCollection);
 }
 
-Array.prototype['pushIfNotExist'] = (x)=> {
+Array.prototype['pushIfNotExist'] = function (x) {
   if (this.indexOf(x) == -1) {
     this.push(x)
   }
