@@ -157,6 +157,16 @@ Array.prototype['pushIfNotExist'] = function (x) {
 };
 Array.prototype['clear'] = function () {
     this.splice(0, this.length);
+    return this;
+};
+Array.prototype['flatten'] = function () {
+    return Array.prototype.concat([], this);
+};
+Array.prototype['collect'] = function (f) {
+    return this.map(function (x) { return ifVal(f(x), x, void 0); }).filter(function (x) { return x !== void 0; });
+};
+Array.prototype['flatMap'] = function (f) {
+    return this.map(f).flatten();
 };
 // Object.prototype['cast'] = function <A>():A {
 //   return this;
