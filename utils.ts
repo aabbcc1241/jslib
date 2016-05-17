@@ -160,6 +160,7 @@ Array.prototype['clear'] = function () {
   return this;
 };
 
+// this operation is not in-place, it create new array
 Array.prototype['flatten'] = function () {
   return Array.prototype.concat([], this);
 };

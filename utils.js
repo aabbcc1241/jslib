@@ -159,6 +159,7 @@ Array.prototype['clear'] = function () {
     this.splice(0, this.length);
     return this;
 };
+// this operation is not in-place, it create new array
 Array.prototype['flatten'] = function () {
     return Array.prototype.concat([], this);
 };
