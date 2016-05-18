@@ -246,17 +246,17 @@ var Map = (function () {
 function isNumber(x) {
     return x == x * 1;
 }
-function object_constructor(o) {
-    if (!o)
+function object_constructor(raw) {
+    if (!raw)
         throw new ReferenceError('raw is null/undefined');
-    if (typeof o == "string")
-        o = JSON.parse(o);
+    if (typeof raw == "string")
+        raw = JSON.parse(raw);
     // console.log('new userprofile', o);
-    for (var x in o) {
+    for (var key in raw) {
         /* skip number */
-        if (isNumber(x))
+        if (isNumber(key))
             continue;
-        this[x] = o[x];
+        this[key] = raw[key];
     }
 }
 //# sourceMappingURL=utils.js.map
