@@ -259,4 +259,12 @@ function object_constructor(raw) {
         this[key] = raw[key];
     }
 }
+var UID;
+(function (UID) {
+    var i = 0;
+    function Next() {
+        return ++i;
+    }
+    UID.Next = Next;
+})(UID || (UID = {}));
 //# sourceMappingURL=utils.js.map

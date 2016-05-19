@@ -271,3 +271,11 @@ function object_constructor(raw) {
     this[key] = raw[key]
   }
 }
+
+module UID {
+  var i = 0;
+
+  export function Next():number {
+    return ++i;
+  }
+}
