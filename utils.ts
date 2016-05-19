@@ -273,9 +273,11 @@ function object_constructor(raw) {
 }
 
 module UID {
-  var i = 0;
+  export const defaultScope = {lastId: 0};
 
-  export function Next():number {
-    return ++i;
+  export function Next(scope = UID.defaultScope):number {
+    if (!isNumber(scope.lastId))
+      scope = UID.defaultScope;
+    return ++scope.lastId;
   }
 }

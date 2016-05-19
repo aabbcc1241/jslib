@@ -261,9 +261,12 @@ function object_constructor(raw) {
 }
 var UID;
 (function (UID) {
-    var i = 0;
-    function Next() {
-        return ++i;
+    UID.defaultScope = { lastId: 0 };
+    function Next(scope) {
+        if (scope === void 0) { scope = UID.defaultScope; }
+        if (!isNumber(scope.lastId))
+            scope = UID.defaultScope;
+        return ++scope.lastId;
     }
     UID.Next = Next;
 })(UID || (UID = {}));
