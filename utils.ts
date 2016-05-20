@@ -177,10 +177,7 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
-// Object.prototype['cast'] = function <A>():A {
-//   return this;
-// };
-
+/* just syntax sugar */
 function cast<A>(x:any):A {
   return x;
 }

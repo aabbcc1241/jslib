@@ -172,9 +172,7 @@ Array.prototype['flatMap'] = function (f) {
 Array.prototype['count'] = function (f) {
     return this.collect(f).length;
 };
-// Object.prototype['cast'] = function <A>():A {
-//   return this;
-// };
+/* just syntax sugar */
 function cast(x) {
     return x;
 }
