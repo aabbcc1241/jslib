@@ -224,7 +224,9 @@ function swap(o:any, a, b:string) {
 class Map<V> {
   private map;
 
-  constructor(initMap = {}) {
+  constructor(initMap:string|any = {}) {
+    if (typeof initMap == "string")
+      initMap = JSON.parse(initMap);
     this.map = initMap;
   }
 
@@ -251,6 +253,10 @@ class Map<V> {
 
   clear() {
     this.map = {}
+  }
+
+  size() {
+    return this.keys().length
   }
 }
 

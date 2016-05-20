@@ -219,6 +219,8 @@ function swap(o, a, b) {
 var Map = (function () {
     function Map(initMap) {
         if (initMap === void 0) { initMap = {}; }
+        if (typeof initMap == "string")
+            initMap = JSON.parse(initMap);
         this.map = initMap;
     }
     Map.prototype.toString = function () {
@@ -240,6 +242,9 @@ var Map = (function () {
     };
     Map.prototype.clear = function () {
         this.map = {};
+    };
+    Map.prototype.size = function () {
+        return this.keys().length;
     };
     return Map;
 }());
