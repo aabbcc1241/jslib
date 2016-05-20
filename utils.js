@@ -262,6 +262,12 @@ function object_constructor(raw) {
         this[key] = raw[key];
     }
 }
+function parseOrRaw(o) {
+    if (typeof o === "string")
+        return JSON.parse(o);
+    else
+        return o;
+}
 var UID;
 (function (UID) {
     UID.defaultScope = { lastId: 0 };

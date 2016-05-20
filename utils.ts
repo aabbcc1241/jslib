@@ -275,6 +275,13 @@ function object_constructor(raw) {
   }
 }
 
+function parseOrRaw(o:any|string):any {
+  if (typeof o === "string")
+    return JSON.parse(o);
+  else
+    return o;
+}
+
 module UID {
   export const defaultScope = {lastId: 0};
 
