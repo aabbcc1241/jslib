@@ -253,6 +253,11 @@ class Map<V> {
         return this;
     }
 
+    remove(key:string|number) {
+        delete(this.map[key]);
+        return this;
+    }
+
     get(key:string|number) {
         return this.map[key];
     }
