@@ -175,6 +175,22 @@ Array.prototype['flatMap'] = function (f) {
 Array.prototype['count'] = function (f) {
     return this.collect(f).length;
 };
+Array.prototype['group'] = function (keyer) {
+    return this.reduce(function (acc, c) {
+        var k = keyer(c);
+        if (acc[k])
+            acc[k].push(c);
+        else
+            acc[k] = [c];
+        return acc;
+    }, []);
+};
+Array.prototype['head'] = function () {
+    return this[0];
+};
+Array.prototype['tail'] = function () {
+    return this.slice(1, this.length);
+};
 /* just syntax sugar */
 function cast(x) {
     return x;

@@ -180,6 +180,23 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
+Array.prototype['group'] = function (keyer:(any)=>number|string):any[] {
+  return this.reduce((acc, c)=> {
+    var k = keyer(c);
+    if (acc[k])
+      acc[k].push(c);
+    else
+      acc[k] = [c];
+    return acc;
+  }, [])
+};
+Array.prototype['head'] = function () {
+  return this[0]
+};
+Array.prototype['tail'] = function () {
+  return this.slice(1, this.length);
+};
+
 /* just syntax sugar */
 function cast<A>(x:any):A {
   return x;
