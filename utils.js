@@ -282,6 +282,4 @@ var UID;
     }
     UID.Next = Next;
 })(UID || (UID = {}));
-Object.prototype['assign'] = Object.prototype['assign'];
-Object.prototype['create'] = Object.prototype['create'];
 //# sourceMappingURL=utils.js.map

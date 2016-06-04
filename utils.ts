@@ -294,6 +294,3 @@ module UID {
     return ++scope.lastId;
   }
 }
-
-Object.prototype['assign'] = Object.prototype['assign'];
-Object.prototype['create'] = Object.prototype['create'];
