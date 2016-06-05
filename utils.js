@@ -136,10 +136,13 @@ function ensure(value, allowNull, type) {
     if (allowNull === void 0) { allowNull = false; }
     if (type === void 0) { type = null; }
     if (isDefined(value, allowNull))
-        if (type == null)
-            return value;
+        if (isDefined(type))
+            if (typeof value == type)
+                return value;
+            else
+                throw new TypeError(value + ' is not ' + type);
         else
-            return typeof value == type;
+            return value;
     else
         throw new ReferenceError();
 }

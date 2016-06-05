@@ -132,11 +132,14 @@ function hasProperty(obj:any, key:string, allowNull = false) {
 
 function ensure(value:any, allowNull = false, type:string = null) {
     if (isDefined(value, allowNull))
-        if (type == null)
+        if (isDefined(type))
+            if (typeof  value == type)
+                return value;
+            else
+                throw new TypeError(value + ' is not ' + type);
+        else // type is not defined
             return value;
-        else
-            return typeof value == type;
-    else
+    else // value is not defined
         throw new ReferenceError();
 }
 
