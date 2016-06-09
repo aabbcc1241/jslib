@@ -26,6 +26,7 @@ module rxjs {
     remove(o):TableObject<A>
     removeAll(o):Observable<A>
     store(o):Observable<CreatedObject>
+    replace(...o):Observable<CreatedObject>
     fetch():Observable<A[]>
   }
   export interface HorizonConstParam {
