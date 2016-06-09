@@ -22,7 +22,7 @@ module rxjs {
   }
   export interface TableObject<A> {
     find(o):FindQuery<A>
-    findAll(o?):TableQuery<A[]>
+    findAll(...o):TableQuery<A[]>
     remove(o):TableObject<A>
     removeAll(o):Observable<A>
     store(o):Observable<CreatedObject>
