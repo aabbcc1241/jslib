@@ -247,6 +247,10 @@ var Map = (function () {
         this.map[key] = value;
         return this;
     };
+    Map.prototype.remove = function (key) {
+        delete (this.map[key]);
+        return this;
+    };
     Map.prototype.get = function (key) {
         return this.map[key];
     };
