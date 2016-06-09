@@ -316,3 +316,5 @@ module UID {
     return ++scope.lastId;
   }
 }
+
+const noop=()=>{};

@@ -302,4 +302,5 @@ var UID;
     }
     UID.Next = Next;
 })(UID || (UID = {}));
+var noop = function () { };
 //# sourceMappingURL=utils.js.map
