@@ -10,17 +10,22 @@ module rxjs {
     subscribe(success?:(a:A)=>void,
               fail?:(err)=>void,
               complete?:()=>void)
-    fetch():Observable<A>
   }
   export interface TableQuery<A> {
     fetch():Observable<A>
   }
+  export interface FindQuery<A> extends TableQuery<A> {
+    defaultIfEmpty():TableQuery<A>
+  }
+  export interface CreatedObject {
+    id:string;
+  }
   export interface TableObject<A> {
-    find(o):TableQuery<A>
+    find(o):FindQuery<A>
     findAll(o?):TableQuery<A[]>
     remove(o):TableObject<A>
     removeAll(o):Observable<A>
-    store(o):Observable<any>
+    store(o):Observable<CreatedObject>
     fetch():Observable<A[]>
   }
   export interface HorizonConstParam {
