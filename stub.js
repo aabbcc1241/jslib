@@ -4,17 +4,11 @@
  *
  * Created by node on 5/28/16.
  */
-var rxjs;
-(function (rxjs) {
-    rxjs.ASCENDING = "ascending";
-    rxjs.DESCENDING = "descending";
-    rxjs.INCLUSIVE = "closed";
-    var EXCLUSIVE = "open";
-})(rxjs || (rxjs = {}));
-Object['assign'] = function (_this) {
-    var that = [];
-    for (var _i = 1; _i < arguments.length; _i++) {
-        that[_i - 1] = arguments[_i];
-    }
-};
+var horizon;
+(function (horizon) {
+    horizon.ASCENDING = "ascending";
+    horizon.DESCENDING = "descending";
+    horizon.INCLUSIVE = "closed";
+    horizon.EXCLUSIVE = "open";
+})(horizon || (horizon = {}));
 //# sourceMappingURL=stub.js.map
