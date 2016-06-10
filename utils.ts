@@ -201,7 +201,9 @@ Array.prototype['tail'] = function () {
 function cast<A>(x:any):A {
   return x;
 }
-/* just syntax sugar */
+/** just syntax sugar
+ * @deprecated not really a sugar
+ * */
 function empty<A>():A {
   return <A>{};
 }

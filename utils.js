@@ -195,7 +195,9 @@ Array.prototype['tail'] = function () {
 function cast(x) {
     return x;
 }
-/* just syntax sugar */
+/** just syntax sugar
+ * @deprecated not really a sugar
+ * */
 function empty() {
     return {};
 }
