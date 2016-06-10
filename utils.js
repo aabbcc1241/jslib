@@ -195,6 +195,10 @@ Array.prototype['tail'] = function () {
 function cast(x) {
     return x;
 }
+/* just syntax sugar */
+function empty() {
+    return {};
+}
 /* this function is used to replace the case below :
  * val v;
  * if(b)
@@ -302,5 +306,6 @@ var UID;
     }
     UID.Next = Next;
 })(UID || (UID = {}));
-var noop = function () { };
+var noop = function () {
+};
 //# sourceMappingURL=utils.js.map

@@ -201,6 +201,10 @@ Array.prototype['tail'] = function () {
 function cast<A>(x:any):A {
   return x;
 }
+/* just syntax sugar */
+function empty<A>():A {
+  return <A>{};
+}
 
 /* this function is used to replace the case below :
  * val v;
@@ -317,4 +321,5 @@ module UID {
   }
 }
 
-const noop=()=>{};
+const noop = ()=> {
+};
