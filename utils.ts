@@ -180,7 +180,7 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
-Array.prototype['group'] = function (keyer:(any)=>number|string):any[] {
+Array.prototype['group'] = function (keyer:(any)=>number|string):any[][] {
   return this.reduce((acc, c)=> {
     var k = keyer(c);
     if (acc[k])
