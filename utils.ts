@@ -312,12 +312,16 @@ function parseOrRaw(o:any|string):any {
 }
 
 module UID {
-  export const defaultScope = {lastId: 0};
+  export const defaultScope = createScope();
 
   export function Next(scope = UID.defaultScope):number {
     if (!isNumber(scope.lastId))
       scope = UID.defaultScope;
     return ++scope.lastId;
+  }
+
+  export function createScope() {
+    return {lastId: 0};
   }
 }
 

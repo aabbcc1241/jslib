@@ -297,7 +297,7 @@ function parseOrRaw(o) {
 }
 var UID;
 (function (UID) {
-    UID.defaultScope = { lastId: 0 };
+    UID.defaultScope = createScope();
     function Next(scope) {
         if (scope === void 0) { scope = UID.defaultScope; }
         if (!isNumber(scope.lastId))
@@ -305,6 +305,10 @@ var UID;
         return ++scope.lastId;
     }
     UID.Next = Next;
+    function createScope() {
+        return { lastId: 0 };
+    }
+    UID.createScope = createScope;
 })(UID || (UID = {}));
 var noop = function () {
 };
