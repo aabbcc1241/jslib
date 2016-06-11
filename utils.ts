@@ -1,5 +1,7 @@
 ///<reference path="../rxjs/ts/rx.all.d.ts"/>
+///<reference path="stub.d.ts"/>
 declare var $:any;
+const PROTOTYPE = '__proto__';
 
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
   if (src == null || dest == null)
@@ -16,6 +18,14 @@ function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)
       }
     }
   }
+}
+function objectClone(o) {
+  if (o) {
+    var res = new noop();
+    Object.assign(res, o);
+    res[PROTOTYPE] = o[PROTOTYPE];
+    return res;
+  } else return o;
 }
 
 /**

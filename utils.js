@@ -1,5 +1,7 @@
 var _this = this;
 ///<reference path="../rxjs/ts/rx.all.d.ts"/>
+///<reference path="stub.d.ts"/>
+var PROTOTYPE = '__proto__';
 function objectCopy(src, dest, filter, recursive) {
     if (filter === void 0) { filter = function (key, value) { return true; }; }
     if (recursive === void 0) { recursive = false; }
@@ -18,6 +20,16 @@ function objectCopy(src, dest, filter, recursive) {
             }
         }
     }
+}
+function objectClone(o) {
+    if (o) {
+        var res = new noop();
+        Object.assign(res, o);
+        res[PROTOTYPE] = o[PROTOTYPE];
+        return res;
+    }
+    else
+        return o;
 }
 /**
  * @return true if the value has been set, false if the value is not modified
