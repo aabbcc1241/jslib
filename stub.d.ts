@@ -2,29 +2,36 @@
  * for typescript compiler and dev-time reference only,
  * DO NOT include in html
  *
- * Created by node on 5/28/16.
+ * Created by beenotung on 5/28/16.
  */
-declare module rxjs {
-  export interface Observable<A> {
-    subscribe(success?:(a:A)=>void,
-              fail?:(err)=>void,
-              complete?:()=>void)
-  }
+
+///<reference path="utils.ts"/>
+
+declare interface ObjectConstructor {
+  assign(_this, ...that)
 }
+
 declare module horizon {
+  export module Rx {
+    export interface Observable<A> {
+      subscribe(success?:(a:A)=>void,
+                fail?:(err)=>void,
+                complete?:()=>void)
+    }
+  }
   export interface TableQuery<A> extends FinalQuery<A> {
     order(field:string, direction?:string):OrderQuery<A> // default ascending
     above(idOrObject:string|any, type?):OrderQuery<A> // default open(exclusive)
   }
   export interface FinalQuery<A> {
     limit(max:number):LimitedFinalQuery<A>
-    fetch():rxjs.Observable<A[]>
+    fetch():horizon.Rx.Observable<A[]>
   }
   export interface SingleFinalQuery<A> {
-    fetch():rxjs.Observable<A>
+    fetch():horizon.Rx.Observable<A>
   }
   export interface LimitedFinalQuery<A> {
-    fetch():rxjs.Observable<A[]>
+    fetch():horizon.Rx.Observable<A[]>
   }
   export interface OrderQuery<A> extends FinalQuery<A> {
     below(idOrObject:string|any, type?):FinalQuery<A[]> // default open(exclusive)
@@ -40,9 +47,9 @@ declare module horizon {
     findAll(...o):TableQuery<A>
     insert(o):TableObject<CreatedObject>
     remove(o):TableObject<CreatedObject>
-    removeAll(o):rxjs.Observable<CreatedObject>
-    replace(...o):rxjs.Observable<CreatedObject>
-    store(o):rxjs.Observable<CreatedObject>
+    removeAll(o):horizon.Rx.Observable<CreatedObject>
+    replace(...o):horizon.Rx.Observable<CreatedObject>
+    store(o):horizon.Rx.Observable<CreatedObject>
     update(o):TableQuery<CreatedObject>
     upsert(o):TableQuery<CreatedObject>
   }
@@ -59,9 +66,9 @@ declare module horizon {
 declare class Horizon {
   constructor(o?)
 
-  find<A>():rxjs.Observable<A>
+  find<A>():horizon.Rx.Observable<A>
 
-  apply<A>(table:string):horizon.TableObject<A>
+  call<A>(_this, table:string):horizon.TableObject<A>
 
   currentUser():horizon.TableQuery<any>
 

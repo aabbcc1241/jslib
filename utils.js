@@ -1,4 +1,5 @@
 var _this = this;
+///<reference path="../rxjs/ts/rx.all.d.ts"/>
 function objectCopy(src, dest, filter, recursive) {
     if (filter === void 0) { filter = function (key, value) { return true; }; }
     if (recursive === void 0) { recursive = false; }
@@ -178,12 +179,11 @@ Array.prototype['count'] = function (f) {
 Array.prototype['group'] = function (keyer) {
     return this.reduce(function (acc, c) {
         var k = keyer(c);
-        if (acc[k])
-            acc[k].push(c);
-        else
-            acc[k] = [c];
+        var arr = acc.get(k) || [];
+        arr.push(c);
+        acc.add(k, arr);
         return acc;
-    }, []);
+    }, new Map());
 };
 Array.prototype['head'] = function () {
     return this[0];

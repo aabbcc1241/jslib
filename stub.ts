@@ -2,7 +2,7 @@
  * for typescript compiler and dev-time reference only,
  * DO NOT include in html
  *
- * Created by node on 5/28/16.
+ * Created by beenotung on 5/28/16.
  */
 
 module horizon {

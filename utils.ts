@@ -1,3 +1,4 @@
+///<reference path="../rxjs/ts/rx.all.d.ts"/>
 declare var $:any;
 
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
@@ -180,15 +181,14 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
-Array.prototype['group'] = function (keyer:(any)=>number|string):any[][] {
-  return this.reduce((acc, c)=> {
-    var k = keyer(c);
-    if (acc[k])
-      acc[k].push(c);
-    else
-      acc[k] = [c];
+Array.prototype['group'] = function (keyer:(any)=>number|string):Map<any[]> {
+  return this.reduce((acc:Map<any[]>, c)=> {
+    const k = keyer(c);
+    const arr = acc.get(k) || [];
+    arr.push(c);
+    acc.add(k, arr);
     return acc;
-  }, [])
+  }, new Map())
 };
 Array.prototype['head'] = function () {
   return this[0]
