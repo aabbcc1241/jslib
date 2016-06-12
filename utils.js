@@ -251,6 +251,16 @@ function swap(o, a, b) {
     o[a] = o[b];
     o[b] = t;
 }
+//reference : http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
+function getParamNames(func) {
+    var STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
+    var ARGUMENT_NAMES = /([^\s,]+)/g;
+    var fnStr = func.toString().replace(STRIP_COMMENTS, '');
+    var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
+    if (result === null)
+        result = [];
+    return result;
+}
 var Map = (function () {
     function Map(initMap) {
         if (initMap === void 0) { initMap = {}; }
@@ -326,4 +336,24 @@ var UID;
 })(UID || (UID = {}));
 var noop = function () {
 };
+/*    Angular libs    */
+/*
+ * used as the default constructor of typed service (or even controller) that depends/need to used other $stuff, e.g. $translate, $ionicPopup
+ * it loop the call.caller arguments and copy to local (private) variable
+ *
+ * example :
+ * ```
+ * constructor(){
+ *   copyCatConstructor(this, arguments);
+ *   // other custom stuff
+ * }
+ * ```
+ * */
+function copyCatConstructor(__this, args) {
+    getParamNames(args.callee.caller)
+        .forEach(function (x, i) {
+        __this[x] = args[i];
+        // console.log('set', x, args[i]);
+    });
+}
 //# sourceMappingURL=utils.js.map
