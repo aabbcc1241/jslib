@@ -27,8 +27,8 @@ declare module horizon {
     limit(max:number):LimitedFinalQuery<A>
     fetch():horizon.Rx.Observable<A[]>
   }
-  export interface SingleFinalQuery<A> {
-    fetch():horizon.Rx.Observable<A>
+  export interface SingleFinalQuery<A> extends horizon.Rx.Observable<A> {
+    defaultIfEmpty():horizon.Rx.Observable<A>
   }
   export interface LimitedFinalQuery<A> {
     fetch():horizon.Rx.Observable<A[]>
@@ -36,8 +36,8 @@ declare module horizon {
   export interface OrderQuery<A> extends FinalQuery<A> {
     below(idOrObject:string|any, type?):FinalQuery<A[]> // default open(exclusive)
   }
-  export interface FindQuery<A> extends SingleFinalQuery<A> {
-    defaultIfEmpty():SingleFinalQuery<A>
+  export interface FindQuery<A> {
+    fetch():SingleFinalQuery<A>
   }
   export interface CreatedObject {
     id:string;
