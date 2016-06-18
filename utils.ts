@@ -200,12 +200,26 @@ Array.prototype['group'] = function (keyer:(any)=>number|string):Map<any[]> {
     return acc;
   }, new Map())
 };
+
 Array.prototype['head'] = function () {
   return this[0]
 };
+
 Array.prototype['tail'] = function () {
   return this.slice(1, this.length);
 };
+
+Array.prototype['tail'] = function () {
+  return this.slice(1, this.length);
+};
+
+Array.prototype['last'] = function () {
+  return this[this.length - 1];
+};
+
+declare interface Array<T> {
+  last():T;
+}
 
 /* just syntax sugar */
 function cast<A>(x:any):A {
@@ -356,7 +370,7 @@ const noop = ()=> {
 /*
  * used as the default constructor of typed service (or even controller) that depends/need to used other $stuff, e.g. $translate, $ionicPopup
  * it loop the call.caller arguments and copy to local (private) variable
- * 
+ *
  * example :
  * ```
  * constructor(){

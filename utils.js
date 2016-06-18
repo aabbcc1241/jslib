@@ -203,6 +203,12 @@ Array.prototype['head'] = function () {
 Array.prototype['tail'] = function () {
     return this.slice(1, this.length);
 };
+Array.prototype['tail'] = function () {
+    return this.slice(1, this.length);
+};
+Array.prototype['last'] = function () {
+    return this[this.length - 1];
+};
 /* just syntax sugar */
 function cast(x) {
     return x;
