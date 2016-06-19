@@ -157,11 +157,18 @@ function ensure(value:any, allowNull = false, type:string = null) {
 
 /*    Lang utils    */
 HTMLCollection.prototype['toArray'] = Array.prototype.slice;
+declare interface HTMLCollection {
+  toArray():HTMLElement[]
+}
 /** @deprecated **/
 function toArray(htmlCollection) {
   return [].slice.call(htmlCollection);
 }
 
+/*
+ * this method is in-place, i.e. not creating new array
+ * return this for chain-ed operation
+ * */
 Array.prototype['pushIfNotExist'] = function (x) {
   if (this.indexOf(x) == -1) {
     this.push(x)
@@ -174,7 +181,10 @@ Array.prototype['clear'] = function () {
   return this;
 };
 
-// this operation is not in-place, it create new array
+/*
+ * this operation is not in-place, it create new array
+ * @Example : Array<Array<number>> => Array<number>
+ * */
 Array.prototype['flatten'] = function () {
   return Array.prototype.concat([], this);
 };
@@ -191,7 +201,7 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
-Array.prototype['group'] = function (keyer:(any)=>number|string):Map<any[]> {
+Array.prototype['groupBy'] = function (keyer:(any)=>number|string):Map<any[]> {
   return this.reduce((acc:Map<any[]>, c)=> {
     const k = keyer(c);
     const arr = acc.get(k) || [];
@@ -201,12 +211,25 @@ Array.prototype['group'] = function (keyer:(any)=>number|string):Map<any[]> {
   }, new Map())
 };
 
-Array.prototype['head'] = function () {
-  return this[0]
+/**
+ * turn this array into an array of smaller (usually) array
+ * @param size : size of sub array
+ * @Example : [1,2,3,4,5].group(5) => [[1,2,3,4,5]]
+ * @Example : [1,2,3,4,5].group(2) => [[1,2],[3,4],[5]]
+ * @Example : [1,2].group(100) => [[1,2]]
+ * */
+Array.prototype['group'] = function (size:number):Array<any[]> {
+  const self:any[] = this; // for typescript blame
+  const n = self.length;
+  const xs:Array<any[]> = [];
+  for (let offset = 0; offset < n; offset += size) {
+    xs.push(self.slice(offset, offset + size));
+  }
+  return xs;
 };
 
-Array.prototype['tail'] = function () {
-  return this.slice(1, this.length);
+Array.prototype['head'] = function () {
+  return this[0]
 };
 
 Array.prototype['tail'] = function () {
@@ -218,6 +241,16 @@ Array.prototype['last'] = function () {
 };
 
 declare interface Array<T> {
+  pushIfNotExist(t:T):T[];
+  clear();
+  flatten<R>():R[];
+  collect(f:(t:T)=>boolean):T[];
+  flatMap<R>(f:(t:T)=>R):R[];
+  count(f:(t:T)=>boolean):number;
+  groupBy(keyer:(t:T)=>number|string):Map<T[]>;
+  group(size:number):Array<T[]>;
+  head():T;
+  tail():T[];
   last():T;
 }
 

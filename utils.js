@@ -165,6 +165,10 @@ HTMLCollection.prototype['toArray'] = Array.prototype.slice;
 function toArray(htmlCollection) {
     return [].slice.call(htmlCollection);
 }
+/*
+ * this method is in-place, i.e. not creating new array
+ * return this for chain-ed operation
+ * */
 Array.prototype['pushIfNotExist'] = function (x) {
     if (this.indexOf(x) == -1) {
         this.push(x);
@@ -175,7 +179,10 @@ Array.prototype['clear'] = function () {
     this.splice(0, this.length);
     return this;
 };
-// this operation is not in-place, it create new array
+/*
+ * this operation is not in-place, it create new array
+ * @Example : Array<Array<number>> => Array<number>
+ * */
 Array.prototype['flatten'] = function () {
     return Array.prototype.concat([], this);
 };
@@ -188,7 +195,7 @@ Array.prototype['flatMap'] = function (f) {
 Array.prototype['count'] = function (f) {
     return this.collect(f).length;
 };
-Array.prototype['group'] = function (keyer) {
+Array.prototype['groupBy'] = function (keyer) {
     return this.reduce(function (acc, c) {
         var k = keyer(c);
         var arr = acc.get(k) || [];
@@ -197,11 +204,24 @@ Array.prototype['group'] = function (keyer) {
         return acc;
     }, new Map());
 };
+/**
+ * turn this array into an array of smaller (usually) array
+ * @param size : size of sub array
+ * @Example : [1,2,3,4,5].group(5) => [[1,2,3,4,5]]
+ * @Example : [1,2,3,4,5].group(2) => [[1,2],[3,4],[5]]
+ * @Example : [1,2].group(100) => [[1,2]]
+ * */
+Array.prototype['group'] = function (size) {
+    var self = this; // for typescript blame
+    var n = self.length;
+    var xs = [];
+    for (var offset = 0; offset < n; offset += size) {
+        xs.push(self.slice(offset, offset + size));
+    }
+    return xs;
+};
 Array.prototype['head'] = function () {
     return this[0];
-};
-Array.prototype['tail'] = function () {
-    return this.slice(1, this.length);
 };
 Array.prototype['tail'] = function () {
     return this.slice(1, this.length);
