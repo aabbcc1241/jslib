@@ -325,7 +325,12 @@ class Map<V> {
     return JSON.stringify(this.map);
   }
 
+  /**@deprecated*/
   add(key:string|number, value:V) {
+    return this.set(key, value);
+  }
+
+  set(key:string|number, value:V) {
     this.map[key] = value;
     return this;
   }
@@ -418,4 +423,15 @@ function copyCatConstructor(__this, args:IArguments) {
       __this[x] = args[i];
       // console.log('set', x, args[i]);
     });
+}
+
+/*
+ * loop from zero to n, exclusing n
+ * */
+function forloop(n:number):((f:(i:number)=>void)=>void) {
+  // return new Array(n).forEach((_, i)=>f(i));
+  return function (f:(i:number)=>void) {
+    for (let i = 0; i < n; i++)
+      f(i);
+  };
 }

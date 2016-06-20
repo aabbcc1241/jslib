@@ -297,7 +297,11 @@ var Map = (function () {
     Map.prototype.toString = function () {
         return JSON.stringify(this.map);
     };
+    /**@deprecated*/
     Map.prototype.add = function (key, value) {
+        return this.set(key, value);
+    };
+    Map.prototype.set = function (key, value) {
         this.map[key] = value;
         return this;
     };
@@ -381,5 +385,15 @@ function copyCatConstructor(__this, args) {
         __this[x] = args[i];
         // console.log('set', x, args[i]);
     });
+}
+/*
+ * loop from zero to n, exclusing n
+ * */
+function forloop(n) {
+    // return new Array(n).forEach((_, i)=>f(i));
+    return function (f) {
+        for (var i = 0; i < n; i++)
+            f(i);
+    };
 }
 //# sourceMappingURL=utils.js.map
