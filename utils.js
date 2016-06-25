@@ -161,9 +161,8 @@ function ensure(value, allowNull, type) {
 }
 /*    Lang utils    */
 HTMLCollection.prototype['toArray'] = Array.prototype.slice;
-/** @deprecated **/
-function toArray(htmlCollection) {
-    return [].slice.call(htmlCollection);
+function toArray(o) {
+    return Array.prototype.slice.call(o);
 }
 /*
  * this method is in-place, i.e. not creating new array

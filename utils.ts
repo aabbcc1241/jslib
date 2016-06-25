@@ -160,9 +160,9 @@ HTMLCollection.prototype['toArray'] = Array.prototype.slice;
 declare interface HTMLCollection {
   toArray():HTMLElement[]
 }
-/** @deprecated **/
-function toArray(htmlCollection) {
-  return [].slice.call(htmlCollection);
+
+function toArray<A>(o):Array<A> {
+  return Array.prototype.slice.call(o);
 }
 
 /*
