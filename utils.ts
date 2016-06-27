@@ -435,3 +435,18 @@ function forloop(n:number):((f:(i:number)=>void)=>void) {
       f(i);
   };
 }
+
+/* TODO detect error */
+function getImageSize(url:string, callback:(width:number, height:number, isLandscape:boolean)=>void) {
+  let img = new Image();
+  let called = false;
+  img.onload = function () {
+    if (called)
+      return;
+    called = true;
+    callback(img.width, img.height, img.width > img.height)
+  };
+  img.src = url;
+  if (img.complete)
+    img.onload();
+}

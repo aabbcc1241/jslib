@@ -395,4 +395,18 @@ function forloop(n) {
             f(i);
     };
 }
+/* TODO detect error */
+function getImageSize(url, callback) {
+    var img = new Image();
+    var called = false;
+    img.onload = function () {
+        if (called)
+            return;
+        called = true;
+        callback(img.width, img.height, img.width > img.height);
+    };
+    img.src = url;
+    if (img.complete)
+        img.onload();
+}
 //# sourceMappingURL=utils.js.map
