@@ -189,8 +189,9 @@ Array.prototype['flatten'] = function () {
   return Array.prototype.concat([], this);
 };
 
-Array.prototype['collect'] = function (f:(any)=>boolean) {
-  return this.map(x=>ifVal(f(x), x, void 0)).filter(x=>x !== void 0);
+Array.prototype['collect'] = function<R>(f:(any)=>R):R[] {
+  // return this.map(x=>ifVal(f(x), x, void 0)).filter(x=>x !== void 0);
+  return this.map(f).filter(x=>x !== void 0);
 };
 
 Array.prototype['flatMap'] = function (f:(any)=>any) {
@@ -244,7 +245,8 @@ declare interface Array<T> {
   pushIfNotExist(t:T):T[];
   clear();
   flatten<R>():R[];
-  collect(f:(t:T)=>boolean):T[];
+  // collect(f:(t:T)=>boolean):T[];
+  collect<R>(f:(t:T)=>R):R[];
   flatMap<R>(f:(t:T)=>R):R[];
   count(f:(t:T)=>boolean):number;
   groupBy(keyer:(t:T)=>number|string):Map<T[]>;

@@ -186,7 +186,8 @@ Array.prototype['flatten'] = function () {
     return Array.prototype.concat([], this);
 };
 Array.prototype['collect'] = function (f) {
-    return this.map(function (x) { return ifVal(f(x), x, void 0); }).filter(function (x) { return x !== void 0; });
+    // return this.map(x=>ifVal(f(x), x, void 0)).filter(x=>x !== void 0);
+    return this.map(f).filter(function (x) { return x !== void 0; });
 };
 Array.prototype['flatMap'] = function (f) {
     return this.map(f).flatten();
