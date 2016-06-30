@@ -326,7 +326,7 @@ var Map = (function () {
         return this.keys().length;
     };
     return Map;
-}());
+})();
 function isNumber(x) {
     return x == x * 1;
 }
