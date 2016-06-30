@@ -11,6 +11,10 @@ declare interface ObjectConstructor {
   assign(_this, ...that)
 }
 
+declare interface Window {
+  unescape(html_code:string):string;
+}
+
 declare module horizon {
   export module Rx {
     export interface Observable<A> {
