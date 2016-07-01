@@ -450,5 +450,5 @@ function getImageSize(url:string, callback:(width:number, height:number, isLands
   };
   img.src = url;
   if (img.complete)
-    img.onload();
+    img.onload(void 0); // pass undefined event
 }

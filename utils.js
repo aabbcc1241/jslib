@@ -408,6 +408,6 @@ function getImageSize(url, callback) {
     };
     img.src = url;
     if (img.complete)
-        img.onload();
+        img.onload(void 0); // pass undefined event
 }
 //# sourceMappingURL=utils.js.map
