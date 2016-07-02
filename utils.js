@@ -37,7 +37,7 @@ function objectClone(o) {
 function initProperty(object, propertyName, initValue, replace) {
     if (replace === void 0) { replace = false; }
     if (propertyName.indexOf('.') == -1) {
-        if (object[propertyName] === undefined || replace) {
+        if (!isDefined(object[propertyName]) || replace) {
             object[propertyName] = initValue;
             return true;
         }
