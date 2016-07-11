@@ -319,6 +319,13 @@ var Map = (function () {
         var _this = this;
         return Object.keys(this.map).map(function (x) { return _this.map[x]; });
     };
+    Map.prototype.forEach = function (f) {
+        var _this = this;
+        this.keys()
+            .forEach(function (k) {
+            f(k, _this.get(k));
+        });
+    };
     Map.prototype.clear = function () {
         this.map = {};
     };

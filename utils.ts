@@ -354,6 +354,13 @@ class Map<V> {
     return Object.keys(this.map).map(x=>this.map[x]);
   }
 
+  forEach(f:(value:V, key:string|number)=>void) {
+    this.keys()
+      .forEach(k=> {
+        f(k, this.get(k));
+      })
+  }
+
   clear() {
     this.map = {}
   }
