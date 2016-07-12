@@ -1,0 +1,29 @@
+{
+  "name": "jslib",
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "https://github.com/beenotung/jsutil",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "dist/lib",
+    "test",
+    "tests"
+  ],
+  "keywords": [
+    "javascript",
+    "typescript",
+    "utils",
+    "stub",
+    "rxjs",
+    "horizon"
+  ],
+  "authors": [
+    "Beeno Tung <aabbcc1241@yahoo.com.hk>"
+  ],
+  "dependencies": {
+    "rxjs": "^4.1.0"
+  }
+}

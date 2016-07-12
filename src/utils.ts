@@ -1,6 +1,5 @@
-///<reference path="../rxjs/ts/rx.all.d.ts"/>
+///<reference path="../lib/rxjs/ts/rx.all.d.ts"/>
 ///<reference path="stub.d.ts"/>
-declare var $:any;
 const PROTOTYPE = '__proto__';
 
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
@@ -202,14 +201,14 @@ Array.prototype['count'] = function (f:(any)=>boolean) {
   return this.collect(f).length;
 };
 
-Array.prototype['groupBy'] = function (keyer:(any)=>number|string):Map<any[]> {
-  return this.reduce((acc:Map<any[]>, c)=> {
+Array.prototype['groupBy'] = function (keyer:(any)=>number|string):jslib.Map<any[]> {
+  return this.reduce((acc:jslib.Map<any[]>, c)=> {
     const k = keyer(c);
     const arr = acc.get(k) || [];
     arr.push(c);
     acc.add(k, arr);
     return acc;
-  }, new Map())
+  }, new jslib.Map())
 };
 
 /**
@@ -249,7 +248,7 @@ declare interface Array<T> {
   collect<R>(f:(t:T)=>R):R[];
   flatMap<R>(f:(t:T)=>R):R[];
   count(f:(t:T)=>boolean):number;
-  groupBy(keyer:(t:T)=>number|string):Map<T[]>;
+  groupBy(keyer:(t:T)=>number|string):jslib.Map<T[]>;
   group(size:number):Array<T[]>;
   head():T;
   tail():T[];
@@ -314,61 +313,65 @@ function getParamNames(func):string[] {
   return result;
 }
 
-class Map<V> {
-  private map;
+module jslib {
+  /** wrapped here to avoid conflict with ES6 (babel-polyfill) */
+  export class Map<V> {
+    private map;
 
-  constructor(initMap:string|any = {}) {
-    if (typeof initMap == "string")
-      initMap = JSON.parse(initMap);
-    this.map = initMap;
-  }
+    constructor(initMap:string|any = {}) {
+      if (typeof initMap == "string")
+        initMap = JSON.parse(initMap);
+      this.map = initMap;
+    }
 
-  toString() {
-    return JSON.stringify(this.map);
-  }
+    toString() {
+      return JSON.stringify(this.map);
+    }
 
-  /**@deprecated*/
-  add(key:string|number, value:V) {
-    return this.set(key, value);
-  }
+    /**@deprecated*/
+    add(key:string|number, value:V) {
+      return this.set(key, value);
+    }
 
-  set(key:string|number, value:V) {
-    this.map[key] = value;
-    return this;
-  }
+    set(key:string|number, value:V) {
+      this.map[key] = value;
+      return this;
+    }
 
-  remove(key:string|number) {
-    delete(this.map[key]);
-    return this;
-  }
+    remove(key:string|number) {
+      delete(this.map[key]);
+      return this;
+    }
 
-  get(key:string|number) {
-    return this.map[key];
-  }
+    get(key:string|number) {
+      return this.map[key];
+    }
 
-  keys():(string|number)[] {
-    return Object.keys(this.map);
-  }
+    keys():(string|number)[] {
+      return Object.keys(this.map);
+    }
 
-  values() {
-    return Object.keys(this.map).map(x=>this.map[x]);
-  }
+    values() {
+      return Object.keys(this.map).map(x=>this.map[x]);
+    }
 
-  forEach(f:(value:V, key:string|number)=>void) {
-    this.keys()
-      .forEach(k=> {
-        f(k, this.get(k));
-      })
-  }
+    forEach(f:(key:string|number,value:V)=>void) {
+      this.keys()
+        .forEach(k=> {
+          f(k, this.get(k));
+        })
+    }
 
-  clear() {
-    this.map = {}
-  }
+    clear() {
+      this.map = {}
+    }
 
-  size() {
-    return this.keys().length
+    size() {
+      return this.keys().length
+    }
   }
 }
+
 
 function isNumber(x):boolean {
   return x == x * 1;
