@@ -155,6 +155,17 @@ function ensure(value:any, allowNull = false, type:string = null) {
 
 
 /*    Lang utils    */
+function isNumber(s):boolean {
+  return s == s * 1;
+}
+
+function toNumber(s):number {
+  if (isNumber(s))
+    return new Number(s).valueOf();
+  else
+    throw new TypeError("s is not a number");
+}
+
 HTMLCollection.prototype['toArray'] = Array.prototype.slice;
 declare interface HTMLCollection {
   toArray():HTMLElement[]
@@ -355,7 +366,7 @@ module jslib {
       return Object.keys(this.map).map(x=>this.map[x]);
     }
 
-    forEach(f:(key:string|number,value:V)=>void) {
+    forEach(f:(key:string|number, value:V)=>void) {
       this.keys()
         .forEach(k=> {
           f(k, this.get(k));
@@ -370,11 +381,6 @@ module jslib {
       return this.keys().length
     }
   }
-}
-
-
-function isNumber(x):boolean {
-  return x == x * 1;
 }
 
 function object_constructor(raw) {
