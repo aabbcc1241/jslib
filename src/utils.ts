@@ -1,4 +1,5 @@
-///<reference path="../lib/rxjs/ts/rx.all.d.ts"/>
+///<reference path="../node_modules/rxjs/Rx.d.ts"/>
+///<reference path="../typings/tsd.d.ts"/>
 ///<reference path="stub.d.ts"/>
 const PROTOTYPE = '__proto__';
 

@@ -1,3 +1,4 @@
 *.orig
 lib/
 dist/
+node_modules/

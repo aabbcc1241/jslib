@@ -1,0 +1,32 @@
+{
+  "name": "jslib",
+  "version": "1.0.0",
+  "description": "utils library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/jslib.git"
+  },
+  "keywords": [
+    "javascript",
+    "typescript",
+    "utils",
+    "stub"
+  ],
+  "author": "Beeno Tung <aabbcc1241@yahoo.com.hk>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/beenotung/jslib/issues"
+  },
+  "homepage": "https://github.com/beenotung/jslib#readme",
+  "dependencies": {
+    "rxjs": "^5.0.0-beta.10",
+    "typings": "^1.3.1"
+  },
+  "devDependencies": {
+    "tsd": "^0.6.5"
+  }
+}
