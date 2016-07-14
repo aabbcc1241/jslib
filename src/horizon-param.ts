@@ -1,7 +1,4 @@
 /**
- * for typescript compiler and dev-time reference only,
- * DO NOT include in html
- *
  * Created by beenotung on 5/28/16.
  */
 

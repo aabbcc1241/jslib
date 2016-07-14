@@ -1,4 +1,3 @@
-///<reference path="../node_modules/rxjs/Rx.d.ts"/>
 ///<reference path="../typings/tsd.d.ts"/>
 ///<reference path="stub.d.ts"/>
 const PROTOTYPE = '__proto__';
@@ -19,6 +18,10 @@ function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)
     }
   }
 }
+
+const noop = ()=> {
+};
+
 function objectClone(o) {
   if (o) {
     var res = new noop();
@@ -114,7 +117,7 @@ function getMaxDepth(obj:any, includeInherit = true, depth = 0):number {
       .reduce((a, c)=> a > c ? a : c);
 }
 
-function recursiveIterate(o:any, parentKey:any = null, includeInherit = true, iterator:Function, callback:Function) {
+function recursiveIterate(o:any, parentKey:any = null, includeInherit = true, iterator?:Function, callback?:Function) {
   var ks = getKeys(o, includeInherit);
   if (ks.length == 0)
     return callback(o, parentKey);
@@ -289,7 +292,7 @@ function ifVal<A>(b:boolean, t:A, f:A) {
   if (b)return t; else return f;
 }
 
-function ifFunVal<A>(b = true, fun:()=>A, v:A, logError = false) {
+function ifFunVal<A>(b:boolean, fun:()=>A, v:A, logError = false) {
   if (!b)return v;
   try {
     return fun();
@@ -419,8 +422,6 @@ module UID {
   }
 }
 
-const noop = ()=> {
-};
 
 /*    Angular libs    */
 

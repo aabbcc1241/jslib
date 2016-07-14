@@ -4,7 +4,10 @@
   "description": "utils library",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "mkdir -p dist && rm -r dist",
+    "prebuild": "npm run clean && tsd install",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -23,10 +26,9 @@
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
   "dependencies": {
-    "rxjs": "^5.0.0-beta.10",
-    "typings": "^1.3.1"
   },
   "devDependencies": {
+    "tsc": "^1.20150623.0",
     "tsd": "^0.6.5"
   }
 }
