@@ -1,5 +1,4 @@
 ///<reference path="../typings/tsd.d.ts"/>
-///<reference path="stub.d.ts"/>
 const PROTOTYPE = '__proto__';
 
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
