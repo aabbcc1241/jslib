@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "mkdir -p dist && rm -rf dist",
-    "prebuild": "npm run clean && tsd install",
+    "clean": "mkdir -p dist && rm -rf dist/*",
+    "prebuild": "npm run clean && npm install && tsd install",
     "build": "tsc",
-    "postbuild": "sed -i 's/\\.\\.\\/typings\\/tsd\\.d\\.ts//' dist/utils.d.ts "
+    "postbuild": "sed -i '/typings\\/tsd\\.d\\.ts/d' dist/utils.d.ts "
   },
   "repository": {
     "type": "git",
