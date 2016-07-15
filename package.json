@@ -8,7 +8,7 @@
     "clean": "mkdir -p dist && rm -rf dist/*",
     "prebuild": "npm run clean && npm install && tsd install",
     "build": "tsc",
-    "postbuild": "sed -i '/typings\\/tsd\\.d\\.ts/d' dist/utils.d.ts "
+    "postbuild": "cp src/*.ts dist/ && sed -i '/typings\\/tsd\\.d\\.ts/d' dist/*.ts"
   },
   "repository": {
     "type": "git",
