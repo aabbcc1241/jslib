@@ -18,7 +18,7 @@ function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)
   }
 }
 
-const noop = ()=> {
+const noop = (...a:any[])=> {
 };
 
 function objectClone(o) {
