@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "tsd install",
     "clean": "mkdir -p dist && rm -rf dist/*",
-    "prebuild": "npm run clean && npm install && tsd install",
+    "prebuild": "npm run clean",
     "build": "tsc",
     "postbuild": "cp src/*.ts dist/ && sed -i '/typings\\/tsd\\.d\\.ts/d' dist/*.ts"
   },
