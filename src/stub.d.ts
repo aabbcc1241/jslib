@@ -86,6 +86,24 @@ declare class Horizon {
 
   onSocketError(f:Function)
 }
+
 /*declare class Object {
  static assign(_this, ...that)
  }*/
+
+/*    web api    */
+declare type Response={
+  ok:boolean;
+  status:number;
+  statusText:string;
+  type:string;
+  url:string;
+  headers:any;
+  body:any;
+  arrayBuffer():any;
+  text():Promise<string>;
+  json():any;
+  blob():any;
+};
+
+declare function fetch(url:string, option:any):Promise<Response>;
