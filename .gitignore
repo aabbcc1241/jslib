@@ -7,5 +7,6 @@ es6/dist/
 style/dist/
 
 npm-debug.log
+npm-debug.log.*
 
 .idea/
