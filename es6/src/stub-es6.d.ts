@@ -29,7 +29,5 @@ declare type Response={
 };
 
 declare function fetch(url:string, option:any):Promise<Response>;
-
-declare class Promise<A> {
-}
+/* TODO use https://github.com/matthew-andrews/isomorphic-fetch if not implemented in IE */
 

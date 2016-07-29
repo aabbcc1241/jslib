@@ -2,6 +2,7 @@
  * Created by beenotung on 7/29/16.
  */
 ///<reference path="lib.ts"/>
+///<reference path="stub-es6.d.ts"/>
 
 module require {
   type PendingCallback=[NOOP,NOOP];
@@ -76,9 +77,9 @@ module require {
 }
 
 /**@deprecated use Object.assign and Object.create instaed */
-function objectClone<A>(o:A):A {
+function objectClone<A>(o:any):A {
   if (o) {
-    var res:A = cast<A>(new noop());
+    var res:any = new noop();
     Object.assign(res, o);
     res[PROTOTYPE] = o[PROTOTYPE];
     return res;

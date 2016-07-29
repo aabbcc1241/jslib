@@ -5,7 +5,7 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "out": "es5/dist/all.js",
+    "out": "es6/dist/all.js",
     "declaration": true
   },
   "files": [

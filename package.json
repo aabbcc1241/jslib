@@ -11,10 +11,10 @@
     "clean": "npm run clean-es5 && npm run clean-es6",
     "prebuild": "npm run clean",
     "build-es5": "tsc --project es5",
-    "build-es6": "tsc --target es6 --project es6",
+    "build-es6": "tsc --project es6",
     "build": "npm run build-es5 && npm run build-es6",
     "postbuild-es5": "sed -i '/typings\\/tsd\\.d\\.ts/d' es5/dist/*.ts",
-    "postbuild-es6": "sed -i '/typings\\/tsd\\.d\\.ts/d' es5/dist/*.ts",
+    "postbuild-es6": "sed -i '/typings\\/tsd\\.d\\.ts/d' es6/dist/*.ts",
     "postbuild": "npm run postbuild-es5 && npm run postbuild-es6"
   },
   "repository": {
@@ -33,9 +33,8 @@
     "url": "https://github.com/beenotung/jslib/issues"
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
-  "dependencies": {},
   "devDependencies": {
-    "tsc": "^1.20150623.0",
-    "tsd": "^0.6.5"
+    "tsd": "^0.6.5",
+    "typescript": "^1.8.10"
   }
 }
