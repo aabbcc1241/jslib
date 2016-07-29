@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
+    "target": "ES6",
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "outDir": "dist",
+    "out": "es5/dist/all.js",
     "declaration": true
   },
   "files": [
-    "src/utils.ts",
-    "src/horizon-param.ts",
-    "src/stub.d.ts"
+    "src/utils-es6.ts"
   ],
   "exclude": [
     "node_modules",

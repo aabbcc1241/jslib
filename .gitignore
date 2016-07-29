@@ -2,3 +2,10 @@
 lib/
 node_modules/
 typings/
+es5/dist/
+es6/dist/
+style/dist/
+
+npm-debug.log
+
+.idea/

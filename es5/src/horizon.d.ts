@@ -5,40 +5,25 @@
  * Created by beenotung on 5/28/16.
  */
 
-///<reference path="utils.ts"/>
+///<reference path="lib.ts"/>
 
-declare interface ObjectConstructor {
-  assign(_this, ...that)
-}
-
-declare interface Window {
-  unescape(html_code:string):string;
-}
-
-declare module horizon {
-  export module Rx {
-    export interface Observable<A> {
-      subscribe(success?:(a:A)=>void,
-                fail?:(err)=>void,
-                complete?:()=>void)
-    }
-  }
+declare namespace Horizon {
   export interface TableQuery<A> extends FinalQuery<A> {
     order(field:string, direction?:string):OrderQuery<A> // default ascending
-    above(idOrObject:string|any, type?):OrderQuery<A> // default open(exclusive)
+    above(idOrObject:string|any, type?:string):OrderQuery<A> // default open(exclusive)
   }
   export interface FinalQuery<A> {
     limit(max:number):LimitedFinalQuery<A>
-    fetch():horizon.Rx.Observable<A[]>
+    fetch():Rx.Observable<A[]>
   }
-  export interface SingleFinalQuery<A> extends horizon.Rx.Observable<A> {
-    defaultIfEmpty():horizon.Rx.Observable<A>
+  export interface SingleFinalQuery<A> extends Rx.Observable<A> {
+    defaultIfEmpty():Rx.Observable<A>
   }
   export interface LimitedFinalQuery<A> {
-    fetch():horizon.Rx.Observable<A[]>
+    fetch():Rx.Observable<A[]>
   }
   export interface OrderQuery<A> extends FinalQuery<A> {
-    below(idOrObject:string|any, type?):FinalQuery<A[]> // default open(exclusive)
+    below(idOrObject:string|any, type?:string):FinalQuery<A[]> // default open(exclusive)
   }
   export interface FindQuery<A> {
     fetch():SingleFinalQuery<A>
@@ -51,9 +36,9 @@ declare module horizon {
     findAll(...o):TableQuery<A>
     insert(o):TableObject<CreatedObject>
     remove(o):TableObject<CreatedObject>
-    removeAll(o):horizon.Rx.Observable<CreatedObject>
-    replace(...o):horizon.Rx.Observable<CreatedObject>
-    store(o):horizon.Rx.Observable<CreatedObject>
+    removeAll(o):Rx.Observable<CreatedObject>
+    replace(...o):Rx.Observable<CreatedObject>
+    store(o):Rx.Observable<CreatedObject>
     update(o):TableQuery<CreatedObject>
     upsert(o):TableQuery<CreatedObject>
   }
@@ -70,11 +55,11 @@ declare module horizon {
 declare class Horizon {
   constructor(o?)
 
-  find<A>():horizon.Rx.Observable<A>
+  find<A>():Rx.Observable<A>
 
-  call<A>(_this, table:string):horizon.TableObject<A>
+  call<A>(_this, table:string):Horizon.TableObject<A>
 
-  currentUser():horizon.TableQuery<any>
+  currentUser():Horizon.TableQuery<any>
 
   hasAuthToken()
 
@@ -86,6 +71,3 @@ declare class Horizon {
 
   onSocketError(f:Function)
 }
-/*declare class Object {
- static assign(_this, ...that)
- }*/

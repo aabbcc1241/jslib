@@ -6,10 +6,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "tsd install",
-    "clean": "mkdir -p dist && rm -rf dist/*",
+    "clean-es5": "mkdir -p es5/dist && rm -rf es5/dist/*",
+    "clean-es6": "mkdir -p es6/dist && rm -rf es6/dist/*",
+    "clean": "npm run clean-es5 && npm run clean-es6",
     "prebuild": "npm run clean",
-    "build": "tsc",
-    "postbuild": "cp src/*.ts dist/ && sed -i '/typings\\/tsd\\.d\\.ts/d' dist/*.ts"
+    "build-es5": "tsc --project es5",
+    "build-es6": "tsc --target es6 --project es6",
+    "build": "npm run build-es5 && npm run build-es6",
+    "postbuild-es5": "sed -i '/typings\\/tsd\\.d\\.ts/d' es5/dist/*.ts",
+    "postbuild-es6": "sed -i '/typings\\/tsd\\.d\\.ts/d' es5/dist/*.ts",
+    "postbuild": "npm run postbuild-es5 && npm run postbuild-es6"
   },
   "repository": {
     "type": "git",
@@ -27,8 +33,7 @@
     "url": "https://github.com/beenotung/jslib/issues"
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "tsc": "^1.20150623.0",
     "tsd": "^0.6.5"

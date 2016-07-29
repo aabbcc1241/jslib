@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "target": "ES5",
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "out": "es5/dist/all.js",
+    "declaration": true
+  },
+  "files": [
+    "src/utils-es5.ts",
+    "src/horizon-param.ts",
+    "src/polyfill.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "typings"
+  ]
+}

@@ -13,6 +13,9 @@
     },
     "rx/rx-lite.d.ts": {
       "commit": "b66d6115d7a8cd74af45e59d36c4447e5d1e9a52"
+    },
+    "es6-promise/es6-promise.d.ts": {
+      "commit": "094dfc6420d3118c9c691764a29b4fbbfc041af6"
     }
   }
 }

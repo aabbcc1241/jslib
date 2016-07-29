@@ -1,4 +1,5 @@
-///<reference path="../typings/tsd.d.ts"/>
+///<reference path="lib.ts"/>
+
 const PROTOTYPE = '__proto__';
 
 function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)=>true, recursive:boolean = false) {
@@ -18,23 +19,16 @@ function objectCopy(src:any, dest:any, filter:Function = (key:string, value:any)
   }
 }
 
-const noop = (...a:any[])=> {
-};
-type NOOP=(...a:any[])=> void;
-
-function objectClone(o) {
-  if (o) {
-    var res = new noop();
-    Object.assign(res, o);
-    res[PROTOTYPE] = o[PROTOTYPE];
-    return res;
-  } else return o;
+class noop {
+  static(...a:any[]):void {
+  }
 }
+type NOOP=(...a:any[])=> void;
 
 /**
  * @return true if the value has been set, false if the value is not modified
  * */
-function initProperty(object, propertyName:string, initValue, replace = false):boolean {
+function initProperty(object:any, propertyName:string, initValue:any, replace = false):boolean {
   if (propertyName.indexOf('.') == -1) {
     if (!isDefined(object[propertyName]) || replace) {
       object[propertyName] = initValue;
@@ -68,28 +62,6 @@ function isRadioSelected(radio:HTMLInputElement, container:HTMLElement|Document 
   return radio.value == selectedRadio.val();
 }
 
-/**@return parentNode if found (only first matched node), false if not found */
-HTMLElement.prototype['findParent'] = (parentFilter)=> {
-  for (var parent = this; ;) {
-    parent = parent.parentNode;
-    if (parent == null)
-      return false;
-    else if (parentFilter(parent))
-      return parent;
-  }
-};
-
-/** @deprecated **/
-function findParent(node, parentFilter) {
-  for (var parent = node; ;) {
-    parent = parent.parentNode;
-    if (parent == null)
-      return false;
-    else if (parentFilter(parent))
-      return parent;
-  }
-}
-
 function object_filter_by_type(obj:any, type:string, includeInherit = true):any[] {
   return getKeys(obj, includeInherit)
     .filter(key=> {
@@ -99,7 +71,7 @@ function object_filter_by_type(obj:any, type:string, includeInherit = true):any[
 
 function getKeys(obj:any, includeInherit = true):string[] {
   if (includeInherit) {
-    var keys = [];
+    let keys = <string[]>[];
     for (var key in obj)
       keys.push(key);
     return keys;
@@ -122,7 +94,7 @@ function recursiveIterate(o:any, parentKey:any = null, includeInherit = true, it
   if (ks.length == 0)
     return callback(o, parentKey);
   else
-    return iterator(o, (v, k)=>recursiveIterate(v, k, includeInherit, iterator, callback));
+    return iterator(o, (v:any, k:string)=>recursiveIterate(v, k, includeInherit, iterator, callback));
 }
 
 /** @deprecated not helpful */
@@ -159,115 +131,20 @@ function ensure(value:any, allowNull = false, type:string = null) {
 
 
 /*    Lang utils    */
-function isNumber(s):boolean {
-  return s == s * 1;
+function isNumber(s:string|number):boolean {
+  return <any>s == <any>+s;
 }
 
-function toNumber(s):number {
+function toNumber(s:string):number {
   if (isNumber(s))
     return new Number(s).valueOf();
   else
     throw new TypeError("s is not a number");
 }
 
-HTMLCollection.prototype['toArray'] = Array.prototype.slice;
-declare interface HTMLCollection {
-  toArray():HTMLElement[]
-}
 
-function toArray<A>(o):Array<A> {
+function toArray<A>(o:any):Array<A> {
   return Array.prototype.slice.call(o);
-}
-
-/*
- * this method is in-place, i.e. not creating new array
- * return this for chain-ed operation
- * */
-Array.prototype['pushIfNotExist'] = function (x) {
-  if (this.indexOf(x) == -1) {
-    this.push(x)
-  }
-  return this;
-};
-
-Array.prototype['clear'] = function () {
-  this.splice(0, this.length);
-  return this;
-};
-
-/*
- * this operation is not in-place, it create new array
- * @Example : Array<Array<number>> => Array<number>
- * */
-Array.prototype['flatten'] = function () {
-  return Array.prototype.concat([], this);
-};
-
-Array.prototype['collect'] = function<R>(f:(any)=>R):R[] {
-  // return this.map(x=>ifVal(f(x), x, void 0)).filter(x=>x !== void 0);
-  return this.map(f).filter(x=>x !== void 0);
-};
-
-Array.prototype['flatMap'] = function (f:(any)=>any) {
-  return this.map(f).flatten();
-};
-
-Array.prototype['count'] = function (f:(any)=>boolean) {
-  return this.collect(f).length;
-};
-
-Array.prototype['groupBy'] = function (keyer:(any)=>number|string):jslib.Map<any[]> {
-  return this.reduce((acc:jslib.Map<any[]>, c)=> {
-    const k = keyer(c);
-    const arr = acc.get(k) || [];
-    arr.push(c);
-    acc.add(k, arr);
-    return acc;
-  }, new jslib.Map())
-};
-
-/**
- * turn this array into an array of smaller (usually) array
- * @param size : size of sub array
- * @Example : [1,2,3,4,5].group(5) => [[1,2,3,4,5]]
- * @Example : [1,2,3,4,5].group(2) => [[1,2],[3,4],[5]]
- * @Example : [1,2].group(100) => [[1,2]]
- * */
-Array.prototype['group'] = function (size:number):Array<any[]> {
-  const self:any[] = this; // for typescript blame
-  const n = self.length;
-  const xs:Array<any[]> = [];
-  for (let offset = 0; offset < n; offset += size) {
-    xs.push(self.slice(offset, offset + size));
-  }
-  return xs;
-};
-
-Array.prototype['head'] = function () {
-  return this[0]
-};
-
-Array.prototype['tail'] = function () {
-  return this.slice(1, this.length);
-};
-
-Array.prototype['last'] = function () {
-  return this[this.length - 1];
-};
-
-declare interface Array<T> {
-  pushIfNotExist(t:T):T[];
-  clear();
-  flatten<R>():R[];
-  // collect(f:(t:T)=>boolean):T[];
-  collect<R>(f:(t:T)=>R):R[];
-  flatMap<R>(f:(t:T)=>R):R[];
-  count(f:(t:T)=>boolean):number;
-  groupBy(keyer:(t:T)=>number|string):jslib.Map<T[]>;
-  group(size:number):Array<T[]>;
-  head():T;
-  tail():T[];
-  last():T;
 }
 
 /* just syntax sugar */
@@ -303,35 +180,35 @@ function ifFunVal<A>(b:boolean, fun:()=>A, v:A, logError = false) {
   }
 }
 
-function xor(a, b):boolean {
-  return !!(a ^ b);
+function xor(a:boolean, b:boolean):boolean {
+  return !!(<number><any>a ^ <number><any>b);
 }
 
 function sign(a:number):number {
   return ifVal(a > 0, 1, ifVal(a < 0, -1, 0));
 }
 
-function swap(o:any, a, b:string) {
+function swap(o:any, a:string, b:string) {
   var t = o[a];
   o[a] = o[b];
   o[b] = t;
 }
 
 //reference : http://stackoverflow.com/questions/1007981/how-to-get-function-parameter-names-values-dynamically-from-javascript
-function getParamNames(func):string[] {
+function getParamNames(func:Function):string[] {
   const STRIP_COMMENTS = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg;
   const ARGUMENT_NAMES = /([^\s,]+)/g;
   var fnStr = func.toString().replace(STRIP_COMMENTS, '');
   var result = fnStr.slice(fnStr.indexOf('(') + 1, fnStr.indexOf(')')).match(ARGUMENT_NAMES);
   if (result === null)
     result = [];
-  return result;
+  return <string[]>result;
 }
 
 module jslib {
   /** wrapped here to avoid conflict with ES6 (babel-polyfill) */
   export class Map<V> {
-    private map;
+    private map:any;
 
     constructor(initMap:string|any = {}) {
       if (typeof initMap == "string")
@@ -387,7 +264,7 @@ module jslib {
   }
 }
 
-function object_constructor(raw) {
+function object_constructor(raw:string|any) {
   if (!raw)
     throw new ReferenceError('raw is null/undefined');
   if (typeof  raw == "string")
@@ -409,15 +286,16 @@ function parseOrRaw(o:any|string):any {
 }
 
 module UID {
-  export const defaultScope = createScope();
+  export type IScope={lastId:number};
+  export const defaultScope:IScope = createScope();
 
-  export function Next(scope = UID.defaultScope):number {
+  export function Next(scope:IScope = UID.defaultScope):number {
     if (!isNumber(scope.lastId))
       scope = UID.defaultScope;
     return ++scope.lastId;
   }
 
-  export function createScope() {
+  export function createScope():IScope {
     return {lastId: 0};
   }
 }
@@ -437,7 +315,7 @@ module UID {
  * }
  * ```
  * */
-function copyCatConstructor(__this, args:IArguments) {
+function copyCatConstructor(__this:any, args:IArguments) {
   getParamNames(args.callee.caller)
     .forEach((x, i)=> {
       __this[x] = args[i];
@@ -469,76 +347,4 @@ function getImageSize(url:string, callback:(width:number, height:number, isLands
   img.src = url;
   if (img.complete)
     img.onload(void 0); // pass undefined event
-}
-
-module require {
-  type PendingCallback=[NOOP,NOOP];
-  const pending = new Map<string,PendingCallback[]>();
-  const cached = new Set<string>();
-
-  /**@return file extension*/
-  async function checkSource(url:string, cors:boolean):Promise<string> {
-    if (url.indexOf('.') == -1)
-      throw new URIError('no sub-filename detected');
-    let option = {
-      mode: cors ? 'cors' : 'no-cors'
-      , cache: 'force-cache'
-    };
-    let response = await fetch(url, option);
-    let text = await response.text();
-    if (text.length == 0) {
-      throw new TypeError('empty file')
-    } else {
-      return url.split('.').pop();
-    }
-  }
-
-  async function injectSource(url:string, cors:boolean) {
-    let filetype = await checkSource(url, cors);
-    return new Promise((resolve, reject)=> {
-      switch (filetype) {
-        case 'js':
-          let script = document.createElement('script');
-          script.onload = resolve;
-          script.onerror = reject;
-          script.async = true;
-          script.src = url;
-          document.head.appendChild(script);
-          break;
-        case 'css':
-          let link = document.createElement('link');
-          link.rel = 'stylesheet';
-          link.href = url;
-          document.head.appendChild(link);
-          break;
-        default:
-          throw new TypeError('invalid file type :' + filetype);
-      }
-    });
-  }
-
-  export function load(url:string, cors = false) {
-    return new Promise((resolve:NOOP, reject:NOOP)=> {
-      if (cached.has(url)) {
-        resolve()
-      } else {
-        if (pending.has(url)) {
-          pending.get(url).push([resolve, reject])
-        } else {
-          let xss = [<PendingCallback>[resolve, reject]];
-          pending.set(url, xss);
-          injectSource(url, cors)
-            .then(()=> {
-              cached.add(url);
-              xss.forEach(xs=>xs[0]());
-              pending.delete(url);
-            })
-            .catch(()=> {
-              xss.forEach(xs=>xs[1]());
-              pending.delete(url);
-            });
-        }
-      }
-    });
-  }
 }
