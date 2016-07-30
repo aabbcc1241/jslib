@@ -2,7 +2,9 @@
 utils library, consist of three parts : es5, es6, style
 
 ## remark
-no need to include es5 version if you're using es6 version (it is bundled)
+~~no need to include es5 version if you're using es6 version (it is bundled)~~
+ - for typescript project (consumer), include the src code directly, don't include the dist
+ - the project (consumer) should add the required typings on their own (to avoid duplicated declare)
 
 ## utils functions
 
