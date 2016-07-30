@@ -1,12 +1,23 @@
 *.orig
 lib/
+
 node_modules/
-typings/
-es5/dist/
-es6/dist/
-style/dist/
+es5/node_modules/
+es6/node_modules/
+
+es5/typings/
+es6/typings/
+
+#es5/dist/
+#es6/dist/
+#style/dist/
 
 npm-debug.log
+es5/npm-debug.log
+es6/npm-debug.log
+
 npm-debug.log.*
+es5/npm-debug.log.*
+es6/npm-debug.log.*
 
 .idea/

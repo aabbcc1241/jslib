@@ -1,8 +1,7 @@
 /**
  * Created by beenotung on 7/29/16.
  */
-///<reference path="lib.ts"/>
-///<reference path="stub-es6.d.ts"/>
+///<reference path="../../es5/dist/all.d.ts"/>
 
 module require {
   type PendingCallback=[NOOP,NOOP];

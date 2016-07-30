@@ -5,7 +5,6 @@
  * Created by beenotung on 5/28/16.
  */
 
-///<reference path="lib.d.ts"/>
 
 declare namespace Horizon {
   export interface TableQuery<A> extends FinalQuery<A> {

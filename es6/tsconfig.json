@@ -5,14 +5,12 @@
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "out": "es6/dist/all.js",
+    "out": "dist/all.js",
     "declaration": true
   },
-  "files": [
-    "src/utils-es6.ts"
-  ],
   "exclude": [
     "node_modules",
-    "typings"
+    "typings/index.d.ts",
+    "../../es5/dist/all.d.ts"
   ]
 }
