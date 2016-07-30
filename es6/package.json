@@ -18,7 +18,8 @@
     "javascript",
     "typescript",
     "utils",
-    "stub"
+    "stub",
+    "es6"
   ],
   "author": "Beeno Tung <aabbcc1241@yahoo.com.hk>",
   "license": "ISC",

@@ -7,13 +7,16 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-es5": "cd es5 && npm install && cd ..",
     "install-es6": "cd es6 && npm install && cd ..",
-    "install": "npm run install-es5 && npm run install-es6",
+    "install-style": "cd style && npm install && cd ..",
+    "install": "npm run install-es5 && npm run install-es6 && npm run install-style",
     "clean-es5": "mkdir -p es5/dist && rm -rf es5/dist/*",
     "clean-es6": "mkdir -p es6/dist && rm -rf es6/dist/*",
-    "clean": "npm run clean-es5 && npm run clean-es6",
+    "clean-style": "mkdir -p style/dist && rm -rf style/dist/*",
+    "clean": "npm run clean-es5 && npm run clean-es6 && npm run clean-style",
     "build-es5": "cd es5 && npm run build && cd ..",
     "build-es6": "cd es6 && npm run build && cd ..",
-    "build": "npm run build-es5 && npm run build-es6"
+    "build-style": "cd style && npm run build && cd ..",
+    "build": "npm run build-es5 && npm run build-es6 && npm run build-style"
   },
   "repository": {
     "type": "git",
@@ -23,7 +26,12 @@
     "javascript",
     "typescript",
     "utils",
-    "stub"
+    "stub",
+    "horizon",
+    "param",
+    "polyfill",
+    "es5",
+    "es6"
   ],
   "author": "Beeno Tung <aabbcc1241@yahoo.com.hk>",
   "license": "ISC",

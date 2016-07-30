@@ -18,7 +18,10 @@
     "javascript",
     "typescript",
     "utils",
-    "stub"
+    "horizon",
+    "param",
+    "polyfill",
+    "es5"
   ],
   "author": "Beeno Tung <aabbcc1241@yahoo.com.hk>",
   "license": "ISC",
