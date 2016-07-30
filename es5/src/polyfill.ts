@@ -1,5 +1,3 @@
-///<reference path="utils-es5.ts"/>
-
 /**@return parentNode if found (only first matched node), false if not found */
 declare interface HTMLElement {
   findParent(parentFilter:(parent:HTMLElement)=>boolean):HTMLElement|boolean;

@@ -1,7 +1,7 @@
 {
-  "name": "jslib",
+  "name": "jslib-style",
   "version": "1.0.0",
-  "description": "utils library, consist of three sub-package: es5, es6, style",
+  "description": "utils library, style",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -33,5 +33,7 @@
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
   "devDependencies": {
+    "tsd": "^0.6.5",
+    "typescript": "^1.8.10"
   }
 }

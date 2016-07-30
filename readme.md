@@ -1,5 +1,5 @@
 # jslib
-common used functions (ES5, ES6)
+utils library, consist of three parts : es5, es6, style
 
 ## remark
 no need to include es5 version if you're using es6 version (it is bundled)
@@ -10,6 +10,7 @@ no need to include es5 version if you're using es6 version (it is bundled)
 - horizon-param.ts
 
 ## installation steps
-1. git clone https://github.com/beenotung/jslib.git
-2. npm install
-3. npm run build
+1. git clone https://github.com/beenotung/jslib.git # or use submodule
+2. cd jslib
+3. ./build.sh
+

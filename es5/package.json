@@ -1,20 +1,15 @@
 {
-  "name": "jslib",
+  "name": "jslib-es5",
   "version": "1.0.0",
-  "description": "utils library, consist of three sub-package: es5, es6, style",
+  "description": "utils library, es5",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "typings install",
-    "clean-es5": "mkdir -p es5/dist && rm -rf es5/dist/*",
-    "clean-es6": "mkdir -p es6/dist && rm -rf es6/dist/*",
-    "clean": "npm run clean-es5 && npm run clean-es6",
+    "clean": "mkdir -p dist && rm -rf dist/*",
     "prebuild": "npm run clean",
-    "build-es5": "tsc --project es5",
-    "build-es6": "tsc --project es6",
-    "postbuild-es6":"echo pending",
-    "postbuild-es5":"echo pending",
-    "build": "npm run build-es5 && npm run build-es6"
+    "build": "tsc",
+    "postbuild": "echo pending"
   },
   "repository": {
     "type": "git",
@@ -33,5 +28,7 @@
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
   "devDependencies": {
+    "typescript": "^1.8.10",
+    "typings": "^1.3.2"
   }
 }

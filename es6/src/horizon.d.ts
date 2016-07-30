@@ -5,7 +5,7 @@
  * Created by beenotung on 5/28/16.
  */
 
-///<reference path="lib.ts"/>
+///<reference path="lib.d.ts"/>
 
 declare namespace Horizon {
   export interface TableQuery<A> extends FinalQuery<A> {
@@ -31,16 +31,27 @@ declare namespace Horizon {
   export interface CreatedObject {
     id:string;
   }
+  interface Filter {
+    [key:string]:any
+  }
+  interface Record {
+    id?:string
+    [key:string]:string|Array<Record>|number|Record
+  }
+  interface OldRecord {
+    id:string
+    [key:string]:string|Array<Record>|number|Record
+  }
   export interface TableObject<A> extends TableQuery<A> {
-    find(o):FindQuery<A>
-    findAll(...o):TableQuery<A>
-    insert(o):TableObject<CreatedObject>
-    remove(o):TableObject<CreatedObject>
-    removeAll(o):Rx.Observable<CreatedObject>
-    replace(...o):Rx.Observable<CreatedObject>
-    store(o):Rx.Observable<CreatedObject>
-    update(o):TableQuery<CreatedObject>
-    upsert(o):TableQuery<CreatedObject>
+    find(o:string|Filter):FindQuery<A>
+    findAll(...o:[string|Filter][]):TableQuery<A>
+    insert(o:Record):TableObject<CreatedObject>
+    remove(o:string|Filter):TableObject<CreatedObject>
+    removeAll(o:string|Filter):Rx.Observable<CreatedObject>
+    replace(...o:[string|Filter][]):Rx.Observable<CreatedObject>
+    store(o:Record):Rx.Observable<CreatedObject>
+    update(o:OldRecord):TableQuery<CreatedObject>
+    upsert(o:Record|OldRecord):TableQuery<CreatedObject>
   }
   export interface HorizonConstParam {
     host:string;
@@ -49,25 +60,25 @@ declare namespace Horizon {
   export interface HorizonConstructor {
     new():Horizon
     new(param:HorizonConstParam):Horizon
-    clearAuthToken()
+    clearAuthToken():void
   }
 }
 declare class Horizon {
-  constructor(o?)
+  constructor(o?:any)
 
   find<A>():Rx.Observable<A>
 
-  call<A>(_this, table:string):Horizon.TableObject<A>
+  call<A>(_this:Horizon, table:string):Horizon.TableObject<A>
 
   currentUser():Horizon.TableQuery<any>
 
-  hasAuthToken()
+  hasAuthToken():boolean
 
-  connect()
+  connect():void
 
-  onReady(f:Function)
+  onReady(f:Function):void
 
-  onDisconnected(f:Function)
+  onDisconnected(f:Function):void
 
-  onSocketError(f:Function)
+  onSocketError(f:(error:any)=>void):void
 }

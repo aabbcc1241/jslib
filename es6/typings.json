@@ -1,0 +1,8 @@
+{
+  "name": "jslib",
+  "dependencies": {},
+  "globalDependencies": {
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
+    "rx": "registry:dt/rx#0.0.0+20160317120654"
+  }
+}
