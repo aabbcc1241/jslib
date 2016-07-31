@@ -6,7 +6,7 @@
  */
 
 
-declare namespace Horizon {
+export declare namespace Horizon {
   export interface TableQuery<A> extends FinalQuery<A> {
     order(field:string, direction?:string):OrderQuery<A> // default ascending
     above(idOrObject:string|any, type?:string):OrderQuery<A> // default open(exclusive)
