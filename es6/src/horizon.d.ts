@@ -62,7 +62,8 @@ declare namespace Horizon {
     clearAuthToken():void
   }
 }
-declare class Horizon {
+
+export declare class Horizon {
   constructor(o?:any)
 
   find<A>():Rx.Observable<A>
