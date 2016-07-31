@@ -324,7 +324,7 @@ function copyCatConstructor(__this:any, args:IArguments) {
 /*
  * loop from zero to n, exclusing n
  * */
-function forloop(n:number):((f:(i:number)=>void)=>void) {
+export function forloop(n:number):((f:(i:number)=>void)=>void) {
   // return new Array(n).forEach((_, i)=>f(i));
   return function (f:(i:number)=>void) {
     for (let i = 0; i < n; i++)
