@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
   "devDependencies": {
+    "isomorphic-fetch": "^2.2.1",
     "typescript": "^1.8.10",
     "typings": "^1.3.2"
   }

@@ -38,3 +38,10 @@ or
 ```
 npm install && npm build
 ```
+
+## dependency
+this must be satisfied by the consumer
+browser => include / inject into DOM / eval in runtime
+library => include for build but ignore in dist
+
+1. [isomorphic-fetch] (https://github.com/matthew-andrews/isomorphic-fetch)

@@ -4,6 +4,7 @@
   "globalDependencies": {
     "jquery": "registry:dt/jquery#1.10.0+20160704162008",
     "rx": "registry:dt/rx#0.0.0+20160317120654",
-    "rx-lite": "registry:dt/rx-lite#0.0.0+20160628114230"
+    "rx-lite": "registry:dt/rx-lite#0.0.0+20160628114230",
+    "whatwg-fetch": "registry:dt/whatwg-fetch#0.0.0+20160728142841"
   }
 }

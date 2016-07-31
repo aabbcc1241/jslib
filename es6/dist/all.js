@@ -282,8 +282,8 @@ var require;
             if (url.indexOf('.') == -1)
                 throw new URIError('no sub-filename detected');
             let option = {
-                mode: cors ? 'cors' : 'no-cors',
-                cache: 'force-cache'
+                mode: cors ? "cors" : "no-cors",
+                cache: "force-cache"
             };
             let response = yield fetch(url, option);
             let text = yield response.text();

@@ -12,9 +12,9 @@ module require {
   async function checkSource(url:string, cors:boolean):Promise<string> {
     if (url.indexOf('.') == -1)
       throw new URIError('no sub-filename detected');
-    let option = {
-      mode: cors ? 'cors' : 'no-cors'
-      , cache: 'force-cache'
+    let option = <RequestInit>{
+      mode: cors ? "cors" : "no-cors"
+      , cache: "force-cache"
     };
     let response = await fetch(url, option);
     let text = await response.text();
