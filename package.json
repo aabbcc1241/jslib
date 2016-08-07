@@ -4,7 +4,9 @@
   "description": "utils library, consist of three sub-package: es5, es6, style",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run test-es5 && npm run test-es6",
+    "test-es5":"cd es5 && npm test",
+    "test-es6":"cd es6 && npm test",
     "install-es5": "cd es5 && npm install && cd ..",
     "install-es6": "cd es6 && npm install && cd ..",
     "install-style": "cd style && npm install && cd ..",

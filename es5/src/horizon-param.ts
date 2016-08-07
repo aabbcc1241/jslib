@@ -8,3 +8,4 @@ module horizon {
   export const INCLUSIVE:string = "closed";
   export const EXCLUSIVE:string = "open";
 }
+export = horizon;
