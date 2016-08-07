@@ -2,14 +2,15 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "target": "ES6",
+    "module": "commonjs",
     "removeComments": true,
     "preserveConstEnums": true,
     "sourceMap": true,
-    "out": "dist/all.js",
+    //    "outFile": "dist/all.js",
+    "outDir": "dist",
     "declaration": true
   },
   "exclude": [
-    "node_modules",
-    "typings/index.d.ts"
+    "node_modules"
   ]
 }
