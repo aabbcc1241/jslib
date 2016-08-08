@@ -5,6 +5,7 @@
 const testname = 'jslib-overall';
 
 const LINE_LENGTH = 32;
+/* H1, H2 style (being less empathized) */
 const LINE = '='.repeat(LINE_LENGTH);
 const LINE2 = '-'.repeat(LINE_LENGTH);
 console.log(LINE);
@@ -44,7 +45,7 @@ function testModule(name, func) {
       console.error('fail', {name: name, error: e});
       console.error(LINE2);
       console.error();
-      reject(e);
+      reject(name);
     })
   }));
 }
@@ -59,6 +60,12 @@ testModule('../es5/dist/utils-es5', function (u5) {
     var a1 = u5.UID.Next();
     var a2 = u5.UID.Next();
     console.assert(a1 != a2, 'UID is not working');
+    var paramName = u5.getParamNames(testModule);
+    console.log({
+      functionName: testModule.name,
+      paramName: paramName
+    });
+    console.assert(Array.isArray(paramName), 'getParamNames not working');
     resolve();
   });
 });
@@ -69,8 +76,24 @@ testModule('../es6/dist/utils-es6', function (u6) {
     var url = 'http://127.0.0.1:8181/horizon/horizon.js';
     u6.require.load(url, void 0, eval)
       .then(function () {
-        show('Horizon');
-        // reject('fake error');
+        // show('Horizon');
+        let hz = new Horizon({
+          host: '127.0.0.1',
+          authType: 'anonymous'
+        });
+        // console.log({hz: hz});
+        console.log({connect: hz.connect.toString()});
+        console.log('connecting to hz');
+        hz.onReady(()=> {
+          console.log('connected to hz');
+          resolve()
+        });
+        hz.onSocketError(e=> {
+          console.error('failed to connect to hz');
+          reject(e)
+        });
+        hz.connect();
+        console.warn('horizon connection is not support in nodejs?');
         resolve();
       })
       .catch(reject);
@@ -87,10 +110,10 @@ Promise.all(testModuleList)
     console.log(LINE);
     console.log();
   })
-  .catch(function (e) {
+  .catch(function (name) {
     console.error();
     console.error(LINE);
-    console.error('test ' + testname + ' end, some failed', {error: e});
+    console.error('test ' + testname + ' end, some failed (' + name + ')');
     console.error(LINE);
     console.error();
   });
