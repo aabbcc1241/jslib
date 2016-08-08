@@ -27,15 +27,15 @@ function testModule(name, func) {
       Promise.resolve(result).then(function () {
         console.log('success', ':', name);
         resolve();
-      }).catch(function () {
+      }).catch(function (e) {
         console.error('fail', ':', name);
         console.error(e);
-        reject();
+        reject(e);
       })
     } catch (e) {
       console.error('fail', ':', name);
       console.error(e);
-      rejectj();
+      reject(e);
     }
     console.log();
   }));
@@ -68,7 +68,7 @@ testModule('../dist/utils-es6', function (u6) {
       })
       .catch(function (error) {
         console.error('load failed', ':', error);
-        reject();
+        reject(error);
       });
   });
 });
