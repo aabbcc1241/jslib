@@ -208,6 +208,13 @@ module jslib {
   export type Producer <T> = () => T;
   export type Mapper <T,R> = (input:T) => R;
 
+  export function run(func:NOOP) {
+    try {
+      func()
+    } catch (e) {
+      console.error(e)
+    }
+  }
 
   /** not the same as Map in ES6 */
   export class JsMap<V> {

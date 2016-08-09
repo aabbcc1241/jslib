@@ -6,9 +6,6 @@ import {PROTOTYPE, NOOP, noop} from "../../es5/src/utils-es5";
 var fetch:IFetchStatic;
 fetch = fetch || eval("require('isomorphic-fetch')");
 
-declare var require:(url:string)=>any;
-let _require = require;
-
 module jslib {
 
   /* mainly to run in browser */

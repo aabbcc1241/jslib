@@ -43,7 +43,7 @@ function testModule(name, func) {
 
 
 show('Horizon');
-testModule('../dist/utils-es6', function (u6) {
+testModule('../dist/es6/src/utils-es6', function (u6) {
   return new Promise(function (resolve, reject) {
     var a = {a: 1};
     var b = u6.objectClone(a);
