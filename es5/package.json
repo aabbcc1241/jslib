@@ -4,7 +4,6 @@
   "description": "utils library, es5",
   "main": "index.js",
   "scripts": {
-    "pretest": "npm run build",
     "test": "node test",
     "postinstall": "typings install",
     "clean": "shx mkdir -p dist && shx rm -rf dist/*",
