@@ -56,7 +56,7 @@ testModule('../es5/dist/utils-es5', function (u5) {
     // console.log({u5:u5});
     console.assert(u5.isNumber('1'), 'isNumber is not working');
     console.assert(!u5.isNumber('a'), 'isNumber is not working');
-    console.assert(u5.Map.constructor.name == 'Function', 'custom Map is not defined');
+    console.assert(u5.JsMap.constructor.name == 'Function', 'JsMap is not defined');
     var a1 = u5.UID.Next();
     var a2 = u5.UID.Next();
     console.assert(a1 != a2, 'UID is not working');

@@ -204,8 +204,13 @@ module jslib {
     return <string[]>result;
   }
 
-  /** wrapped here to avoid conflict with ES6 (babel-polyfill) */
-  export class Map<V> {
+  export type Consumer <T> = (data:T) => void;
+  export type Producer <T> = () => T;
+  export type Mapper <T,R> = (input:T) => R;
+
+
+  /** not the same as Map in ES6 */
+  export class JsMap<V> {
     private map:any;
 
     constructor(initMap:string|any = {}) {

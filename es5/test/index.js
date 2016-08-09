@@ -22,7 +22,7 @@ testModule('../dist/horizon-param', function (param) {
 });
 
 testModule('../dist/utils-es5', function (u5) {
-  console.assert(typeof u5.Map === "function", 'jslib.Map does not exist?');
+  console.assert(typeof u5.JsMap === "function", 'jslib.JsMap does not exist?');
 });
 
 testModule('../dist/polyfill', function (polyfill) {

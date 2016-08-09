@@ -1,38 +1,5 @@
-import {Map as JsMap} from "./utils-es5"
-
-declare interface Array<T> {
-  pushIfNotExist(t:T):T[];
-  clear():void;
-  flatten<R>():R[];
-  // collect(f:(t:T)=>boolean):T[];
-  collect<R>(f:(t:T)=>R):R[];
-  flatMap<R>(f:(t:T)=>R):R[];
-  count(f:(t:T)=>boolean):number;
-  groupBy(keyer:(t:T)=>number|string):JsMap<T[]>;
-  group(size:number):Array<T[]>;
-  head():T;
-  tail():T[];
-  last():T;
-
-  /* copy from typescript/lib/lib.d.ts */
-  length:number;
-  push(...items:T[]):number;
-  concat<U extends T[]>(...items:U[]):T[];
-  concat(...items:T[]):T[];
-  slice(start?:number, end?:number):T[];
-}
-declare interface HTMLElement {
-  /**@return parentNode if found (only first matched node), false if not found */
-  findParent(parentFilter:(parent:HTMLElement)=>boolean):HTMLElement|boolean;
-  [key:string]:any; // only in chrome
-}
-declare interface HTMLCollection {
-  toArray():HTMLElement[]
-}
-
-declare var Array:{prototype:Array<any>};
-declare var HTMLElement:{prototype:HTMLElement};
-declare var HTMLCollection:{prototype:HTMLCollection};
+import {JsMap} from "./utils-es5"
+import {Array, HTMLElement, HTMLCollection} from "./polyfill-stub"
 
 /* avoid filling on nodejs server */
 if (typeof HTMLElement !== "undefined") {
@@ -66,9 +33,12 @@ Array.prototype.pushIfNotExist = function (x):any[] {
   return this;
 };
 
-Array.prototype.clear = function () {
-  this.splice(0, this.length);
-  return this;
+/*
+ * reset the array to zero length
+ * return old values
+ * */
+Array.prototype.clear = function ():any[] {
+  return this.splice(0, this.length);
 };
 
 /*
@@ -109,9 +79,9 @@ Array.prototype.groupBy = function (keyer:(any:any)=>number|string):JsMap<any[]>
  * @Example : [1,2].group(100) => [[1,2]]
  * */
 Array.prototype.group = function (size:number):Array<any[]> {
-  const self:any[] = this; // for typescript blame
+  const self = <Array<any[]>> this; // for typescript blame
   const n = self.length;
-  const xs = <Array<any[]>> <any> [];
+  const xs = <Array<any[]>> [];
   for (let offset = 0; offset < n; offset += size) {
     xs.push(self.slice(offset, offset + size));
   }
@@ -130,3 +100,6 @@ Array.prototype.last = function () {
   return this[this.length - 1];
 };
 
+module jslib {
+}
+export = jslib;
