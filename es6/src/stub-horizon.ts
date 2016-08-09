@@ -1,12 +1,13 @@
 /**
  * for typescript compiler and dev-time reference only,
+ * not naming .d.ts for tsconfig specific issue (it skip .d.ts in library)
  * DO NOT include in html
  *
  * Created by beenotung on 5/28/16.
  */
 
 
-declare module Horizon {
+module HorizonStub {
   export interface TableQuery<A> extends FinalQuery<A> {
     order(field:string, direction?:string):OrderQuery<A> // default ascending
     above(idOrObject:string|any, type?:string):OrderQuery<A> // default open(exclusive)
@@ -30,14 +31,14 @@ declare module Horizon {
   export interface CreatedObject {
     id:string;
   }
-  interface Filter {
+  export interface Filter {
     [key:string]:any
   }
-  interface Record {
+  export interface Record {
     id?:string
     [key:string]:string|Array<Record>|number|Record
   }
-  interface OldRecord {
+  export interface OldRecord {
     id:string
     [key:string]:string|Array<Record>|number|Record
   }
@@ -83,4 +84,4 @@ declare module Horizon {
 
   export var Horizon:HorizonConstructor;
 }
-export = Horizon
+export = HorizonStub

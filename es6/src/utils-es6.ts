@@ -1,7 +1,7 @@
 /**
  * Created by beenotung on 7/29/16.
  */
-import {PROTOTYPE, NOOP, noop} from "../../es5/dist/utils-es5";
+import {PROTOTYPE, NOOP, noop} from "../../es5/src/utils-es5";
 
 var fetch:IFetchStatic;
 fetch = fetch || eval("require('isomorphic-fetch')");
