@@ -1,9 +1,9 @@
 import {JsMap} from "./utils-es5"
-import {Array, HTMLElement, HTMLCollection} from "./polyfill-stub"
+import {RichArray, RichHTMLElement, RichHTMLCollection, castRichArray} from "./polyfill-stub";
 
 /* avoid filling on nodejs server */
-if (typeof HTMLElement !== "undefined") {
-  HTMLElement.prototype.findParent = function (parentFilter:(parent:HTMLElement)=>boolean):HTMLElement|boolean {
+if (typeof window !== "undefined") {
+  RichHTMLElement.prototype.findParent = function (parentFilter:(parent:RichHTMLElement)=>boolean):RichHTMLElement|boolean {
     for (let parent = this; ;) {
       parent = parent.parentElement;
       if (parent == null)
@@ -13,12 +13,12 @@ if (typeof HTMLElement !== "undefined") {
     }
   };
   /** @deprecated **/
-  const findParent = HTMLElement.prototype.findParent;
+  const findParent = RichHTMLElement.prototype.findParent;
 }
 
 /* avoid filling on nodejs server */
-if (typeof HTMLCollection !== "undefined") {
-  HTMLCollection.prototype.toArray = Array.prototype.slice;
+if (typeof window !== "undefined") {
+  RichHTMLCollection.prototype.toArray = Array.prototype.slice;
 }
 
 
@@ -26,7 +26,7 @@ if (typeof HTMLCollection !== "undefined") {
  * this method is in-place, i.e. not creating new array
  * return this for chain-ed operation
  * */
-Array.prototype.pushIfNotExist = function (x):any[] {
+RichArray.prototype.pushIfNotExist = function (x):any[] {
   if (this.indexOf(x) == -1) {
     this.push(x)
   }
@@ -37,7 +37,7 @@ Array.prototype.pushIfNotExist = function (x):any[] {
  * reset the array to zero length
  * return old values
  * */
-Array.prototype.clear = function ():any[] {
+RichArray.prototype.clear = function ():any[] {
   return this.splice(0, this.length);
 };
 
@@ -45,23 +45,23 @@ Array.prototype.clear = function ():any[] {
  * this operation is not in-place, it create new array
  * @Example : Array<Array<number>> => Array<number>
  * */
-Array.prototype.flatten = function () {
+RichArray.prototype.flatten = function () {
   return Array.prototype.concat([], this);
 };
 
-Array.prototype.collect = function<R>(f:(any:any)=>R|void):R[] {
+RichArray.prototype.collect = function<R>(f:(any:any)=>R|void):R[] {
   return this.map(f).filter((x:any)=>x !== void 0);
 };
 
-Array.prototype.flatMap = function <R>(f:(any:any)=>R):R[] {
+RichArray.prototype.flatMap = function <R>(f:(any:any)=>R):R[] {
   return this.map(f).flatten();
 };
 
-Array.prototype.count = function (f:(any:any)=>boolean) {
+RichArray.prototype.count = function (f:(any:any)=>boolean) {
   return this.collect(f).length;
 };
 
-Array.prototype.groupBy = function (keyer:(any:any)=>number|string):JsMap<any[]> {
+RichArray.prototype.groupBy = function (keyer:(any:any)=>number|string):JsMap<any[]> {
   return this.reduce((acc:JsMap<any[]>, c:any)=> {
     const k = keyer(c);
     const arr = acc.get(k) || [];
@@ -71,6 +71,7 @@ Array.prototype.groupBy = function (keyer:(any:any)=>number|string):JsMap<any[]>
   }, new JsMap())
 };
 
+
 /**
  * turn this array into an array of smaller (usually) array
  * @param size : size of sub array
@@ -78,28 +79,34 @@ Array.prototype.groupBy = function (keyer:(any:any)=>number|string):JsMap<any[]>
  * @Example : [1,2,3,4,5].group(2) => [[1,2],[3,4],[5]]
  * @Example : [1,2].group(100) => [[1,2]]
  * */
-Array.prototype.group = function (size:number):Array<any[]> {
+RichArray.prototype.group = function (size:number):RichArray<any[]> {
   const self = <Array<any[]>> this; // for typescript blame
   const n = self.length;
   const xs = <Array<any[]>> [];
   for (let offset = 0; offset < n; offset += size) {
     xs.push(self.slice(offset, offset + size));
   }
-  return xs;
+  return castRichArray(xs);
 };
 
-Array.prototype.head = function () {
+RichArray.prototype.head = function () {
   return this[0]
 };
 
-Array.prototype.tail = function () {
+RichArray.prototype.tail = function () {
   return this.slice(1, this.length);
 };
 
-Array.prototype.last = function () {
+RichArray.prototype.last = function () {
   return this[this.length - 1];
 };
 
 module jslib {
+  // /* tunneling the alias from parent, to avoid importing the parent
+  //  * the parent is logically private, but nodejs module doesn't not support the logic */
+  // /* does not work? */
+  // export var Array = RichArray;
+  // export var HTMLElement = RichHTMLElement;
+  // export var HTMLCollection = RichHTMLCollection;
 }
 export = jslib;

@@ -6,7 +6,7 @@
  */
 
 
-export declare namespace Horizon {
+declare module Horizon {
   export interface TableQuery<A> extends FinalQuery<A> {
     order(field:string, direction?:string):OrderQuery<A> // default ascending
     above(idOrObject:string|any, type?:string):OrderQuery<A> // default open(exclusive)
@@ -61,24 +61,26 @@ export declare namespace Horizon {
     new(param:HorizonConstParam):Horizon
     clearAuthToken():void
   }
+  export interface Horizon {
+    find<A>():Rx.Observable<A>
+
+    call<A>(_this:Horizon, table:string):TableObject<A>
+
+    <A> ():TableObject<A>;
+
+    currentUser():TableQuery<any>
+
+    hasAuthToken():boolean
+
+    connect():void
+
+    onReady(f:Function):void
+
+    onDisconnected(f:Function):void
+
+    onSocketError(f:(error:any)=>void):void
+  }
+
+  export var Horizon:HorizonConstructor;
 }
-
-export declare class Horizon {
-  constructor(o?:any)
-
-  find<A>():Rx.Observable<A>
-
-  call<A>(_this:Horizon, table:string):Horizon.TableObject<A>
-
-  currentUser():Horizon.TableQuery<any>
-
-  hasAuthToken():boolean
-
-  connect():void
-
-  onReady(f:Function):void
-
-  onDisconnected(f:Function):void
-
-  onSocketError(f:(error:any)=>void):void
-}
+export = Horizon

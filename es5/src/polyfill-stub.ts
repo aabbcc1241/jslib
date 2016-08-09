@@ -2,7 +2,7 @@ import {JsMap} from "./utils-es5"
 import {NativeArray, NativeHTMLElement, NativeHTMLCollection} from "./native-alias"
 
 module jslib {
-  export interface Array<T> extends NativeArray<T> {
+  export interface RichArray<T> extends NativeArray<T> {
     pushIfNotExist(t:T):T[];
     clear():T[];
     flatten<R>():R[];
@@ -11,23 +11,36 @@ module jslib {
     flatMap<R>(f:(t:T)=>R):R[];
     count(f:(t:T)=>boolean):number;
     groupBy(keyer:(t:T)=>number|string):JsMap<T[]>;
-    group(size:number):Array<T[]>;
+    group(size:number):RichArray<T[]>;
     head():T;
     tail():T[];
     last():T;
   }
-  export var Array = <{prototype:Array<any>}> <any> NativeArray;
 
-  export interface HTMLElement extends NativeHTMLElement {
+  export var RichArray = <{
+    prototype:RichArray<any>,
+  }> <any> NativeArray;
+
+  /* ensure the element type is same */
+  export function castRichArray<T>(arr:Array<T>):RichArray<T> {
+    return <RichArray<T>>arr;
+  }
+
+  export function EmptyArray<T>():RichArray<T> {
+    // return castRichArray<T>([]);
+    return <RichArray<T>>[];
+  }
+
+  export interface RichHTMLElement extends NativeHTMLElement {
     /**@return parentNode if found (only first matched node), false if not found */
-    findParent(parentFilter:(parent:HTMLElement)=>boolean):HTMLElement|boolean;
+    findParent(parentFilter:(parent:RichHTMLElement)=>boolean):RichHTMLElement|boolean;
     [key:string]:any; // only in chrome
   }
-  export var HTMLElement = <{prototype:HTMLElement}> <any> NativeHTMLElement;
+  export var RichHTMLElement = <{prototype:RichHTMLElement}> <any> NativeHTMLElement;
 
-  export interface HTMLCollection extends NativeHTMLCollection {
-    toArray():HTMLElement[]
+  export interface RichHTMLCollection extends NativeHTMLCollection {
+    toArray():RichHTMLElement[]
   }
-  export var HTMLCollection = <{prototype:HTMLCollection}> <any> NativeHTMLCollection;
+  export var RichHTMLCollection = <{prototype:RichHTMLCollection}> <any> NativeHTMLCollection;
 }
 export = jslib;
