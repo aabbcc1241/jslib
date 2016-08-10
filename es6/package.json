@@ -2,19 +2,6 @@
   "name": "jslib-es6",
   "version": "1.0.0",
   "description": "utils library, es6",
-  "main": "index.js",
-  "scripts": {
-    "test": "node test",
-    "postinstall": "typings install",
-    "clean": "shx mkdir -p dist && shx rm -rf dist/*",
-    "preprebuild":"cd ../es5 && npm run build",
-    "prebuild": "npm run clean",
-    "build": "tsc"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/beenotung/jslib.git"
-  },
   "keywords": [
     "javascript",
     "typescript",
@@ -28,10 +15,23 @@
     "url": "https://github.com/beenotung/jslib/issues"
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/jslib.git"
+  },
   "devDependencies": {
     "isomorphic-fetch": "^2.2.1",
     "shx": "^0.1.2",
     "typescript": "^1.8.10",
     "typings": "^1.3.2"
+  },
+  "dependencies": {},
+  "scripts": {
+    "test": "node test",
+    "postinstall": "typings install",
+    "clean": "shx mkdir -p dist && shx rm -rf dist/*",
+    "preprebuild":"cd ../es5 && npm run build",
+    "prebuild": "npm run clean",
+    "build": "tsc"
   }
 }

@@ -2,17 +2,6 @@
   "name": "jslib-style",
   "version": "1.0.0",
   "description": "utils library, style",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "mkdir -p dist && rm -rf dist/*",
-    "prebuild": "npm run clean",
-    "build": "node-sass --include-path src src/common.scss dist/common.css"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/beenotung/jslib.git"
-  },
   "keywords": [
     "scss"
   ],
@@ -22,7 +11,18 @@
     "url": "https://github.com/beenotung/jslib/issues"
   },
   "homepage": "https://github.com/beenotung/jslib#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/beenotung/jslib.git"
+  },
   "devDependencies": {
     "node-sass": "^3.8.0"
+  },
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "clean": "mkdir -p dist && rm -rf dist/*",
+    "prebuild": "npm run clean",
+    "build": "node-sass --include-path src src/common.scss dist/common.css"
   }
 }
