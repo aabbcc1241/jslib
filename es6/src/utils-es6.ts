@@ -3,8 +3,9 @@
  */
 import {PROTOTYPE, NOOP, noop} from "../../es5/src/utils-es5";
 
-var fetch:IFetchStatic;
-fetch = fetch || eval("require('isomorphic-fetch')");
+import _fetch = require("isomorphic-fetch");
+var fetch: IFetchStatic;
+fetch = _fetch;
 
 module jslib {
 
@@ -15,7 +16,7 @@ module jslib {
     const cached = new Set<string>();
 
     /**@return file extension*/
-    async function checkSource(url:string, cors:boolean):Promise<[string,string]> {
+    async function checkSource(url: string, cors: boolean): Promise<[string,string]> {
       if (url.indexOf('.') == -1)
         throw new URIError('no sub-filename detected');
       let option = <RequestInit>{
@@ -23,7 +24,7 @@ module jslib {
         , cache: "force-cache"
       };
       let response = await fetch(url, option);
-      let text:string = await response.text();
+      let text: string = await response.text();
       if (text.length == 0) {
         throw new TypeError('empty file')
       } else {
@@ -31,12 +32,12 @@ module jslib {
       }
     }
 
-    async function injectSource(url:string, cors:boolean, scopedEval?:(code:string)=>void):Promise<string> {
+    async function injectSource(url: string, cors: boolean, scopedEval?: (code: string)=>void): Promise<string> {
       let [filetype,filecontent] = await checkSource(url, cors);
-      return new Promise((resolve:NOOP, reject:NOOP)=> {
+      return new Promise((resolve: NOOP, reject: NOOP)=> {
         if (typeof window === 'undefined')
           if (filetype == 'js') {
-            let result:any;
+            let result: any;
             if (scopedEval)
               scopedEval(filecontent);
             else
@@ -67,9 +68,9 @@ module jslib {
       });
     }
 
-    export function load(url:string, cors = false, scopedEval:(code:string)=>void) {
+    export function load(url: string, cors = false, scopedEval: (code: string)=>void) {
       /* check if in nodejs or browser */
-      return new Promise((resolve:NOOP, reject:NOOP)=> {
+      return new Promise((resolve: NOOP, reject: NOOP)=> {
         if (cached.has(url)) {
           resolve()
         } else {
@@ -79,7 +80,7 @@ module jslib {
             let xss = [<PendingCallback>[resolve, reject]];
             pending.set(url, xss);
             injectSource(url, cors, scopedEval)
-              .then((code?:string)=> {
+              .then((code?: string)=> {
                 cached.add(url);
                 xss.forEach(xs=>xs[0](code));
                 pending.delete(url);
@@ -95,9 +96,9 @@ module jslib {
   }
 
   /**@deprecated use Object.assign and Object.create instaed */
-  export function objectClone<A>(o:any):A {
+  export function objectClone<A>(o: any): A {
     if (o) {
-      var res:any = new noop();
+      var res: any = new noop();
       Object.assign(res, o);
       res[PROTOTYPE] = o[PROTOTYPE];
       return res;
