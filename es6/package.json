@@ -27,11 +27,18 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "node test",
+    "--------------------------------install": "",
     "postinstall": "typings install",
+    "--------------------------------dep": "",
+    "prepostinstall": "typings install",
+    "--------------------------------dep-hook": "",
+    "preprebuild": "cd ../es5 && npm run build",
+    "--------------------------------main": "",
     "clean": "shx mkdir -p dist && shx rm -rf dist/*",
-    "preprebuild":"cd ../es5 && npm run build",
+    "build": "tsc",
+    "test": "node test",
+    "--------------------------------main-hook": "",
     "prebuild": "npm run clean",
-    "build": "tsc"
+    "--------------------------------": ""
   }
 }

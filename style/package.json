@@ -20,9 +20,15 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "--------------------------------install": "",
+    "--------------------------------dep": "",
+    "--------------------------------dep-hook": "",
+    "--------------------------------main": "",
     "clean": "mkdir -p dist && rm -rf dist/*",
+    "build": "node-sass --include-path src src/common.scss dist/common.css",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "--------------------------------main-hook": "",
     "prebuild": "npm run clean",
-    "build": "node-sass --include-path src src/common.scss dist/common.css"
+    "--------------------------------": ""
   }
 }

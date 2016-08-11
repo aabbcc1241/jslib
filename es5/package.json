@@ -28,10 +28,16 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "node test",
+    "--------------------------------install": "",
     "postinstall": "typings install",
+    "--------------------------------dep": "",
+    "--------------------------------dep-hook": "",
+    "--------------------------------main": "",
     "clean": "shx mkdir -p dist && shx rm -rf dist/*",
+    "build": "tsc",
+    "test": "node test",
+    "--------------------------------main-hook": "",
     "prebuild": "npm run clean",
-    "build": "tsc"
+    "--------------------------------": ""
   }
 }
