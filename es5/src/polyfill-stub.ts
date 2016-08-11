@@ -3,17 +3,17 @@ import {NativeArray, NativeHTMLElement, NativeHTMLCollection} from "./native-ali
 
 module jslib {
   export interface RichArray<T> extends NativeArray<T> {
-    pushIfNotExist(t:T):T[];
-    clear():T[];
-    flatten<R>():R[];
-    // collect(f:(t:T)=>boolean):T[];
-    collect<R>(f:(t:T)=>R):R[];
-    flatMap<R>(f:(t:T)=>R):R[];
+    pushIfNotExist(t:T):RichArray<T>;
+    clear():RichArray<T>;
+    flatten<R>():RichArray<R>;
+    // collect(f:(t:T)=>boolean):RichArray<T>;
+    collect<R>(f:(t:T)=>R):RichArray<R>;
+    flatMap<R>(f:(t:T)=>R):RichArray<R>;
     count(f:(t:T)=>boolean):number;
-    groupBy(keyer:(t:T)=>number|string):JsMap<T[]>;
-    group(size:number):RichArray<T[]>;
+    groupBy(keyer:(t:T)=>number|string):JsMap<RichArray<T>>;
+    group(size:number):RichArray<RichArray<T>>;
     head():T;
-    tail():T[];
+    tail():RichArray<T>;
     last():T;
   }
 
@@ -22,12 +22,11 @@ module jslib {
   }> <any> NativeArray;
 
   /* ensure the element type is same */
-  export function castRichArray<T>(arr:Array<T>):RichArray<T> {
+  export function castRichArray<T>(arr:NativeArray<T>|RichArray<T>):RichArray<T> {
     return <RichArray<T>>arr;
   }
 
   export function EmptyArray<T>():RichArray<T> {
-    // return castRichArray<T>([]);
     return <RichArray<T>>[];
   }
 
@@ -39,7 +38,7 @@ module jslib {
   export var RichHTMLElement = <{prototype:RichHTMLElement}> <any> NativeHTMLElement;
 
   export interface RichHTMLCollection extends NativeHTMLCollection {
-    toArray():RichHTMLElement[]
+    toArray():RichArray<RichHTMLElement>
   }
   export var RichHTMLCollection = <{prototype:RichHTMLCollection}> <any> NativeHTMLCollection;
 }
