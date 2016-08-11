@@ -19,10 +19,11 @@ module jslib {
     }
   }
 
-  export class noop {
-    static(...a: any[]): void {
-    }
-  }
+  // export class noop {
+  //   static(...a: any[]): void {
+  //   }
+  // }
+  export function noop(...a:any[]){}
   export type NOOP=(...a: any[])=> void;
 
   /**

@@ -98,7 +98,8 @@ module jslib {
   /**@deprecated use Object.assign and Object.create instaed */
   export function objectClone<A>(o: any): A {
     if (o) {
-      var res: any = new noop();
+      var res: any = ()=> {
+      };
       Object.assign(res, o);
       res[PROTOTYPE] = o[PROTOTYPE];
       return res;
