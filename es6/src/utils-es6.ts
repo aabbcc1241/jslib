@@ -95,11 +95,16 @@ module jslib {
     }
   }
 
-  /**@deprecated use Object.assign and Object.create instaed */
   export function objectClone<A>(o: any): A {
     if (o) {
-      var res: any = ()=> {
-      };
+      var res: any;
+      if (typeof o === 'function')
+        res = ()=> {
+        };
+      else if (Array.isArray(o))
+        res = [];
+      else if (typeof o === 'object')
+        res = {};
       Object.assign(res, o);
       res[PROTOTYPE] = o[PROTOTYPE];
       return res;
