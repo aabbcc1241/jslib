@@ -111,6 +111,19 @@ module jslib {
     } else return o;
   }
 
+  export interface Defer<T> {
+    promise: Promise<T>;
+    resolve: (t?: T)=>void;
+    reject: (error?: any)=>void;
+  }
+  export function defer<T>() {
+    let defer = <Defer<T>>{};
+    defer.promise = new Promise<T>((resolve, reject)=> {
+      defer.resolve = resolve;
+      defer.reject = reject;
+    });
+    return defer;
+  }
 }
 
 export = jslib;
