@@ -116,5 +116,6 @@ Promise.all(testModuleList)
     console.error('test ' + testname + ' end, some failed (' + name + ')');
     console.error(LINE);
     console.error();
+    process.exit(1);
   });
 

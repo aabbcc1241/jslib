@@ -30,12 +30,12 @@ function testModule(name, func) {
       }).catch(function (e) {
         console.error('fail', ':', name);
         console.error(e);
-        reject(e);
+        reject(name);
       })
     } catch (e) {
       console.error('fail', ':', name);
       console.error(e);
-      reject(e);
+      reject(name);
     }
     console.log();
   }));
@@ -78,8 +78,9 @@ Promise.resolve.apply(Promise, testModuleList)
     console.log();
     console.log('test ' + testname + ' end, all success');
   })
-  .catch(function () {
+  .catch(function (name) {
     console.log();
-    console.log('test ' + testname + ' end, some failed');
+    console.log(`test ${testname} end, some failed (${name})`);
+    process.exit(1);
   });
 
