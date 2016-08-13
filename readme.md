@@ -39,6 +39,12 @@ or
 npm install && npm build
 ```
 
+## test
+this is quick test (frequently used during developement, there it doesn't not install)
+```
+./test.sh
+```
+
 ## dependency
 this must be satisfied by the consumer
 browser => include / inject into DOM / eval in runtime

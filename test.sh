@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-npm install && npm run build && npm test
+npm run build && npm test
