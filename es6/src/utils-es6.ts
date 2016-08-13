@@ -139,7 +139,7 @@ module jslib {
     value: T;
     ready: boolean;
   }
-  export class AsynLazy<T> {
+  export class AsyncLazy<T> {
     private ready = false;
     private fun: Producer<T>;
     private value: T;
