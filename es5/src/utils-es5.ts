@@ -23,7 +23,9 @@ module jslib {
   //   static(...a: any[]): void {
   //   }
   // }
-  export function noop(...a:any[]){}
+  export function noop(...a: any[]) {
+  }
+
   export type NOOP=(...a: any[])=> void;
 
   /**
@@ -210,7 +212,7 @@ module jslib {
   export type Producer <T> = () => T;
   export type Mapper <T,R> = (input: T) => R;
 
-  export function run(func: NOOP) {
+  export function tryRun(func: NOOP) {
     try {
       func()
     } catch (e) {

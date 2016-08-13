@@ -1,7 +1,7 @@
 /**
  * Created by beenotung on 7/29/16.
  */
-import {PROTOTYPE, NOOP, noop} from "../../es5/src/utils-es5";
+import {PROTOTYPE, NOOP, Producer} from "../../es5/src/utils-es5";
 
 import _fetch = require("isomorphic-fetch");
 var fetch: IFetchStatic;
@@ -123,6 +123,54 @@ module jslib {
       defer.reject = reject;
     });
     return defer;
+  }
+
+  export async function run<A>(func: Producer<A>): Promise<A> {
+    return new Promise<A>((resolve, reject)=> {
+      try {
+        resolve(func());
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  export interface LazyValue <T> {
+    value: T;
+    ready: boolean;
+  }
+  export class AsynLazy<T> {
+    private ready = false;
+    private fun: Producer<T>;
+    private value: T;
+
+    constructor(fun: Producer<T>) {
+      this.fun = fun;
+    }
+
+    async get(): Promise<T> {
+      if (this.ready)
+        return Promise.resolve(this.value);
+      else {
+        this.value = await run<T>(this.fun);
+        return this.value;
+      }
+    }
+  }
+  export class Lazy<T> {
+    private ready = false;
+    private fun: Producer<T>;
+    private value: T;
+
+    constructor(fun: Producer<T>) {
+      this.fun = fun;
+    }
+
+    get(): T {
+      if (this.ready)return this.value;
+      this.value = this.fun();
+      return this.value;
+    }
   }
 }
 

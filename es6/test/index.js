@@ -70,6 +70,12 @@ testModule('../dist/es6/src/utils-es6', function (u6) {
         console.error('load failed', ':', error);
         reject(error);
       });
+    console.log('creating an defer');
+    var defer = u6.defer();
+    defer.promise.then(x=>console.log({deferValue: {x}}));
+    defer.resolve('this is defered value');
+    Promise.resolve(defer.promise).then(x=>console.log({d1: x}));
+    Promise.resolve(defer.promise).then(x=>console.log({d2: x}));
   });
 });
 
