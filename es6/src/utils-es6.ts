@@ -135,26 +135,22 @@ module jslib {
     });
   }
 
-  export interface LazyValue <T> {
-    value: T;
-    ready: boolean;
+  export function resolveOnce<A>(promise: Promise<A>): AsyncLazy<A> {
+    return new AsyncLazy(()=>promise);
   }
-  export class AsyncLazy<T> {
-    private ready = false;
-    private fun: Producer<T>;
-    private value: T;
 
-    constructor(fun: Producer<T>) {
+  export class AsyncLazy<T> {
+    private fun: Producer<Promise<T>>;
+    private promise: Promise<T>;
+
+    constructor(fun: Producer<Promise<T>>) {
       this.fun = fun;
     }
 
     async get(): Promise<T> {
-      if (this.ready)
-        return Promise.resolve(this.value);
-      else {
-        this.value = await run<T>(this.fun);
-        return this.value;
-      }
+      if (!this.promise)
+        this.promise = this.fun();
+      return Promise.resolve(this.promise);
     }
   }
   export class Lazy<T> {
@@ -167,9 +163,13 @@ module jslib {
     }
 
     get(): T {
-      if (this.ready)return this.value;
-      this.value = this.fun();
-      return this.value;
+      if (this.ready)
+        return this.value;
+      else {
+        this.value = this.fun();
+        this.ready = true;
+        return this.value;
+      }
     }
   }
 }

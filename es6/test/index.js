@@ -76,6 +76,38 @@ testModule('../dist/es6/src/utils-es6', function (u6) {
     defer.resolve('this is defered value');
     Promise.resolve(defer.promise).then(x=>console.log({d1: x}));
     Promise.resolve(defer.promise).then(x=>console.log({d2: x}));
+
+    /* async lazy */
+    function hardFunc() {
+      let defer = u6.defer();
+      console.log('calculating very hard.....');
+      setTimeout(()=> {
+        defer.resolve('this value is very hard to get')
+      }, 100);
+      return defer.promise;
+    }
+
+    var hard = new u6.AsyncLazy(hardFunc);
+    hard.get().then(x=>console.log({hard1: x}));
+    hard.get().then(x=>console.log({hard2: x}));
+    hard.get().then(x=>console.log({hard3: x}));
+    console.log({hard: hard, get: hard.get()});
+
+    /* lazy */
+    var lazy = new u6.Lazy(function () {
+      console.log('doing lazy stuff......');
+      return 'finished lazy stuff';
+    });
+    console.log({lazy1: lazy.get()});
+    console.log({lazy2: lazy.get()});
+    console.log({lazy3: lazy.get()});
+
+    /* resolve once */
+    console.log('loading web page');
+    var fetch = require('node-fetch');
+    var cachedWebpage = u6.resolveOnce(fetch('http://www.google.com').then(x=>x.status));
+    cachedWebpage.get().then(x=>console.log({'view page 1': x}));
+    cachedWebpage.get().then(x=>console.log({'view page 2': x}));
   });
 });
 
