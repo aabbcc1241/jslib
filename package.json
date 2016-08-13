@@ -23,11 +23,13 @@
     "type": "git",
     "url": "git+https://github.com/beenotung/jslib.git"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "npm-run-all": "^2.3.0"
+  },
   "dependencies": {},
   "scripts": {
     "--------------------------------install": "",
-    "install": "npm run install-es5 && npm run install-es6 && npm run install-style",
+    "install": "run-p install-es5 install-es6 install-style",
     "--------------------------------dep": "",
     "install-es5": "cd es5 && npm install",
     "install-es6": "cd es6 && npm install",
@@ -42,11 +44,11 @@
     "test-es6": "cd es6 && npm test",
     "--------------------------------dep-hook": "",
     "--------------------------------main": "",
-    "clean": "npm run clean-es5 && npm run clean-es6 && npm run clean-style",
-    "build": "npm run build-es5 && npm run build-es6 && npm run build-style",
+    "clean": "run-p clean-es5 clean-es6 clean-style",
+    "build": "run-p build-es5 build-es6 build-style",
     "test": "node test",
     "--------------------------------main-hook": "",
-    "pretest": "npm run test-es5 && npm run test-es6",
+    "pretest": "run-s test-es5 test-es6",
     "--------------------------------": ""
   }
 }
