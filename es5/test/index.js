@@ -13,13 +13,10 @@ function testModule(name, func) {
   } catch (e) {
     console.error('fail', ':', name);
     console.error(e);
+    process.exit(1);
   }
   console.log();
 }
-
-testModule('../dist/horizon-param', function (param) {
-  console.assert(typeof param.ASCENDING === 'string', 'ascending flag should be string')
-});
 
 testModule('../dist/utils-es5', function (u5) {
   console.assert(typeof u5.JsMap === "function", 'jslib.JsMap does not exist?');
