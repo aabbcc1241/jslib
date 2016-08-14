@@ -50,4 +50,18 @@ testModule('../dist/functional/monad', function (functional) {
   console.log('is value printed? ' + result);
 });
 
+testModule('../dist/functional/std', function (functional) {
+  let some = functional.maybe('test');
+  let none = functional.none();
+  console.log(some.toString());
+  console.log(none.toString());
+  console.log('----');
+  none.bind(x=> {
+    console.log('so sad');
+    assert('none', false)
+  });
+  some.bind(x=>console.log('last line should be ----'));
+  console.log('there should be exactly one line under ----');
+});
+
 console.log('test jslib-es5 end');

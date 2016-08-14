@@ -21,11 +21,12 @@ module functional {
     [name: string]: Function;
 
     /* for debug */
-    toString(): string;
+    toString(overrideName?: string): string;
   }
   export type Transform<A,B>=(value?: A, ...args: any[])=>B
 
   /*    internal stuff    */
+  /* wrap them explicitly for better readability */
   namespace internal {
     export const id = 'is_monad';
     export const Prototype: any = {};
@@ -33,15 +34,36 @@ module functional {
   }
 
   /*    monad implementation    */
-  export function createUnit<A>(modifier?: (monad: Monad<A>, value: A)=>void, name = 'Monad'): Unit<A> {
+  export interface UnitParam<A> {
+    name?: string;
+    modifier?: Modifier<A>
+  }
+  export type Modifier<A> =   (monad: Monad<A>, value: A)=> void;
+  export function createUnit<A>(_param?: UnitParam<A>|string|Modifier<A>|{name: Modifier<A>}): Unit<A> {
+    let modifier: Modifier<A>;
+    let name = 'Monad';
+    if (typeof _param === 'string') {
+      name = _param;
+    } else if (typeof _param === 'function') {
+      modifier = <Modifier<A>> _param;
+    } else if (typeof _param === 'object') {
+      let keys = Object.keys(_param);
+      let key: string = keys[0];
+      if (keys.length == 1 && typeof key === 'string' && (typeof (<any>_param)[key]) === 'function') {
+        name = key;
+        modifier = <Modifier<A>> (<any>_param)[key];
+      }
+    } else if (_param !== void 0) {
+      throw new TypeError('invalid param: ' + _param)
+    }
     let prototype = Object.create(internal.Prototype);
     let unit = <Unit<A>> function unit(value: A) {
       let monad = <Monad<A>> Object.create(prototype);
       monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args: any[]|IArguments): Monad<B> {
         return transform(value, ...Array.prototype.slice.call(arguments));
       };
-      monad.toString = function toString(): string {
-        return `${name}(${value})`;
+      monad.toString = function toString(overrideName: string = name): string {
+        return `${overrideName}(${value})`;
       };
       if (typeof modifier === 'function') {
         modifier(monad, value)
