@@ -19,6 +19,9 @@ module functional {
 
     /* store method */
     [name: string]: Function;
+
+    /* for debug */
+    toString(): string;
   }
   export type Transform<A,B>=(value?: A, ...args: any[])=>B
 
@@ -30,12 +33,15 @@ module functional {
   }
 
   /*    monad implementation    */
-  export function createUnit<A>(modifier?: (monad: Monad<A>, value: A)=>void): Unit<A> {
+  export function createUnit<A>(modifier?: (monad: Monad<A>, value: A)=>void, name = 'Monad'): Unit<A> {
     let prototype = Object.create(internal.Prototype);
     let unit = <Unit<A>> function unit(value: A) {
       let monad = <Monad<A>> Object.create(prototype);
       monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args: any[]|IArguments): Monad<B> {
         return transform(value, ...Array.prototype.slice.call(arguments));
+      };
+      monad.toString = function toString(): string {
+        return `${name}(${value})`;
       };
       if (typeof modifier === 'function') {
         modifier(monad, value)
@@ -57,7 +63,7 @@ module functional {
 
   /*    public util functions    */
   export function isMonad(o: any): boolean {
-    return o[internal.id] === true;
+    return typeof o === 'object' && o[internal.id] === true;
   }
 }
 export = functional;

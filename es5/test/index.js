@@ -18,6 +18,11 @@ function testModule(name, func) {
   console.log();
 }
 
+function assert(name, result) {
+  console.assert(result, 'failed test: ' + name);
+  console.log('passed test: ' + name);
+}
+
 testModule('../dist/utils-es5', function (u5) {
   console.assert(typeof u5.JsMap === "function", 'jslib.JsMap does not exist?');
 });
@@ -33,8 +38,16 @@ testModule('../dist/polyfill', function (polyfill) {
   console.assert(arr.length == 0, 'Array.prototype.clear not working');
 });
 
-testModule('../dist/functional/monad', function (monad) {
-  console.dir(monad);
+testModule('../dist/functional/monad', function (functional) {
+  console.dir({module: functional});
+  assert('isMonad negative', functional.isMonad({}) == false);
+  let monad = functional.createUnit()('test');
+  assert('isMonad position', functional.isMonad(monad));
+  let result = monad.bind(x=> {
+    console.log('i get the value:', x);
+    return functional.createUnit()(true);
+  });
+  console.log('is value printed? ' + result);
 });
 
 console.log('test jslib-es5 end');
