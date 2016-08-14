@@ -1,6 +1,5 @@
 /**
  * typescript implement of https://github.com/douglascrockford/monad
- * the case of is inspire by https://github.com/cbowdon/TsMonad
  * and some more type of monad and utils functions
  * */
 
@@ -15,7 +14,7 @@ module functional {
 
   export interface Monad<A> {
     /* chain operation */
-    bind<B>(transform: Transform<A,Monad<B>>, args: any[]|IArguments): Monad<B>;
+    bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B>;
 
     /* store method */
     [name: string]: Function;
@@ -38,7 +37,7 @@ module functional {
     name?: string;
     modifier?: Modifier<A>
   }
-  export type Modifier<A> =   (monad: Monad<A>, value: A)=> void;
+  export type Modifier<A> = (monad: Monad<A>, value: A)=>void;
   export function createUnit<A>(_param?: UnitParam<A>|string|Modifier<A>|{name: Modifier<A>}): Unit<A> {
     let modifier: Modifier<A>;
     let name = 'Monad';
@@ -57,27 +56,32 @@ module functional {
       throw new TypeError('invalid param: ' + _param)
     }
     let prototype = Object.create(internal.Prototype);
+
+    function wrapFunction(monad: Monad<A>, func: Transform<A,any>): Transform<A,Monad<any>> {
+      return function (...args: any[]) {
+        let result = monad.bind<any>(func, args);
+        return isMonad(result)
+          ? result
+          : createUnit()(result);
+      };
+    }
+
     let unit = <Unit<A>> function unit(value: A) {
       let monad = <Monad<A>> Object.create(prototype);
-      monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args: any[]|IArguments): Monad<B> {
-        return transform(value, ...Array.prototype.slice.call(arguments));
+      monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B> {
+        return transform(value, ...args);
       };
       monad.toString = function toString(overrideName: string = name): string {
         return `${overrideName}(${value})`;
       };
       if (typeof modifier === 'function') {
-        modifier(monad, value)
+        modifier(monad, value);
       }
       return monad;
     };
     unit.lift = function lift(name: string, func: Transform<A,any>): Unit<A> {
       let monad = <Monad<A>> this;
-      prototype[name] = function (...args: any[]) {
-        let result = monad.bind<any>(func, arguments);
-        return isMonad(result)
-          ? result
-          : createUnit()(result);
-      };
+      prototype[name] = wrapFunction(monad, func);
       return unit;
     };
     return unit;

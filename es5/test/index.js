@@ -62,6 +62,13 @@ testModule('../dist/functional/std', function (functional) {
   });
   some.bind(x=>console.log('last line should be ----'));
   console.log('there should be exactly one line under ----');
+  Object.keys(' '.repeat(10)).forEach(()=> {
+    let maybe = functional.maybe(Math.random() > 0.5 ? 'dice' : void 0);
+    maybe.caseOf({
+      'some': x=>console.log({result: x}),
+      'none': ()=>console.log('no result')
+    });
+  })
 });
 
 console.log('test jslib-es5 end');

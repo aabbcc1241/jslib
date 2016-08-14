@@ -10,43 +10,43 @@ module functional {
   export interface Id <A> extends Monad<A> {
   }
   export interface Maybe<A>extends Monad<A> {
+    /* the method caseOf is inspire by https://github.com/cbowdon/TsMonad */
+    caseOf<B>(branch: Maybe.ICaseOf<A,B>): B
+  }
+  export namespace Maybe {
+    export type ICaseOf<A,B>={
+      some: (value: A)=>B,
+      none: ()=>B
+    }
   }
 
   /*    implements    */
-  export const id = createUnit();
+  export const id = createUnit((monad: Monad<any>, value: any)=> {
+    monad.bind(()=>id(value));
+  });
   export const maybe = createUnit({
-    'Maybe': (monad: Monad<Maybe<any>>, value: any)=> {
+    'Maybe': (monad: Maybe<any>, value: any)=> {
       if (isDefined(value)) {
         monad.toString = ()=>`Some(${value})`;
       } else {
         monad.bind = ()=>monad;
         monad.toString = ()=>'None()';
       }
+      monad.caseOf = function<B>(branch: Maybe.ICaseOf<any,B>) {
+        // console.log('branch',branch);
+        if (isDefined(value)) {
+          return branch.some(value);
+        } else {
+          return branch.none();
+        }
+      };
     }
   });
 
   /*    utils functions    */
-  export function none(): Maybe<any> {
-    return maybe(void 0)
-  }
+  export const some = maybe;
+  export const none = ()=>maybe(void 0);
 
-  /*  export const Id = createUnit();
-   export const Maybe = createUnit();
 
-   export interface Maybe<A> extends Monad<A> {
-   }
-   export const Maybe = createUnit();
-
-   export function maybe<A>(value?: A): Maybe<A> {
-   return Maybe
-   }
-
-   export function some<A>(value?: A): Maybe<A> {
-   return Maybe(value);
-   }
-
-   export function none(): Maybe<any> {
-   return Maybe(void 0);
-   }*/
 }
 export = functional;
