@@ -33,4 +33,8 @@ testModule('../dist/polyfill', function (polyfill) {
   console.assert(arr.length == 0, 'Array.prototype.clear not working');
 });
 
+testModule('../dist/functional/package', function (functional) {
+  console.dir({functional: functional});
+});
+
 console.log('test jslib-es5 end');
