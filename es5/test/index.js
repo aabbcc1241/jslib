@@ -61,10 +61,10 @@ testModule('../dist/functional/monad', function (functional) {
     assert('monad order ' + calc, x == ((2 + 3) * 3))
   ));
   let calc2 = functional.unit(2)
-      .wrapAndBind(x=>x + 3)
-      .wrapAndBind(x=>x * 3)
+      .bind(x=>x + 3)
+      .bind(x=>x * 3)
     ;
-  calc2.wrapAndBind(x=>assert(`monad order 2 ${calc2}`, x == 15));
+  calc2.bind(x=>assert(`monad order 2 ${calc2}`, x == 15));
 });
 
 testModule('../dist/functional/std', function (functional) {

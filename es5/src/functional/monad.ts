@@ -14,8 +14,7 @@ module functional {
 
   export interface Monad<A> {
     /* chain operation */
-    bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B>;
-    wrapAndBind<B>(transform: Transform<A,B>, args?: any[]): Monad<B>;
+    bind<B>(transform: Transform<A,B|Monad<B>>, args?: any[]): Monad<B>;
 
     /* store method */
     [name: string]: Function;
@@ -69,14 +68,8 @@ module functional {
 
     let unit = <Unit<A>> function unit(value: A) {
       let monad = <Monad<A>> Object.create(prototype);
-      monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B> {
-        return transform(value, ...args);
-      };
-      monad.wrapAndBind = function wrapAndBind<B>(transform: Transform<A,B>, args?: any[]): Monad<B> {
-        return monad.bind((a, args)=> {
-          let b = transform(a, ...args);
-          return wrap<B>(b);
-        });
+      monad.bind = function bind<B>(transform: Transform<A,B|Monad<B>>, args?: any[]): Monad<B> {
+        return wrap<B>(transform(value, ...args));
       };
       monad.toString = function toString(overrideName: string = name): string {
         return `${overrideName}(${value})`;
@@ -101,7 +94,9 @@ module functional {
     return _unit(value)
   }
 
-  const wrap = unit;
+  export function wrap<T>(tOrMt: T|Monad<T>): Monad<T> {
+    return <Monad<T>> (isMonad(tOrMt) ? tOrMt : _unit(tOrMt));
+  }
 
   export function isMonad(o: any): boolean {
     return typeof o === 'object' && o[internal.id] === true;
