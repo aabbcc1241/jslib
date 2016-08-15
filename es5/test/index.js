@@ -61,10 +61,41 @@ testModule('../dist/functional/monad', function (functional) {
     assert('monad order ' + calc, x == ((2 + 3) * 3))
   ));
   let calc2 = functional.unit(2)
-      .bind(x=>x + 3)
-      .bind(x=>x * 3)
+      .map(x=>x + 3)
+      .map(x=>x * 3)
     ;
   calc2.bind(x=>assert(`monad order 2 ${calc2}`, x == 15));
+  let x1 = calc2.toString();
+  let x2 = JSON.stringify(calc2);
+  console.log({
+    x1: x1
+    , x2: x2
+  });
+  let math = functional.createUnit()
+      .lift('plus', (a, b)=>a + b)
+      .lift('sub', (a, b)=>a - b)
+      .lift('multi', (a, b)=>a * b)
+      .lift('div', (a, b)=>a / b)
+      .lift('mod', (a, b)=>a % b)
+      .method('valueOf', x=>x)
+    ;
+  let calc3 = math(2)
+    .plus(3)
+    .multi(3);
+  calc3.bind(x=>assert('custom math unit', x == 15));
+  console.log({
+    calc3: calc3
+    , value: calc3.valueOf()
+    , string: calc3.toString()
+  });
+  let chain = functional.unit(2)
+    .chain(x=> {
+      console.log('calculating chain');
+      return x + 3
+    })
+    .chain(x=>x * 3);
+  console.log('chained result', chain.do());
+  console.log('done again', chain.do())
 });
 
 testModule('../dist/functional/std', function (functional) {
