@@ -48,6 +48,23 @@ testModule('../dist/functional/monad', function (functional) {
     return functional.createUnit()(true);
   });
   console.log('is value printed? ' + result);
+  let print = (_, x)=> {
+    console.log(`print ${x}`);
+    return functional.createUnit()(`printed ${x}`);
+  };
+  monad.bind(print, 'f').bind(print, 'g');
+  let calc = functional.unit(2)
+      .bind(x=>functional.unit(x + 3))
+      .bind(x=>functional.unit(x * 3))
+    ;
+  calc.bind(x=>functional.unit(
+    assert('monad order ' + calc, x == ((2 + 3) * 3))
+  ));
+  let calc2 = functional.unit(2)
+      .wrapAndBind(x=>x + 3)
+      .wrapAndBind(x=>x * 3)
+    ;
+  calc2.wrapAndBind(x=>assert(`monad order 2 ${calc2}`, x == 15));
 });
 
 testModule('../dist/functional/std', function (functional) {
@@ -62,13 +79,13 @@ testModule('../dist/functional/std', function (functional) {
   });
   some.bind(x=>console.log('last line should be ----'));
   console.log('there should be exactly one line under ----');
-  Object.keys(' '.repeat(10)).forEach(()=> {
+  Object.keys(' '.repeat(4)).forEach(()=> {
     let maybe = functional.maybe(Math.random() > 0.5 ? 'dice' : void 0);
     maybe.caseOf({
       'some': x=>console.log({result: x}),
       'none': ()=>console.log('no result')
     });
-  })
+  });
 });
 
 console.log('test jslib-es5 end');

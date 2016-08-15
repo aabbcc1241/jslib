@@ -2,13 +2,11 @@
  * the standard monads
  * */
 
-import {Monad, createUnit, Unit} from "./monad";
+import {Monad, createUnit, Unit, isMonad, unit} from "./monad";
 import {isDefined} from"../utils-es5";
 
 module functional {
   /*    interfaces    */
-  export interface Id <A> extends Monad<A> {
-  }
   export interface Maybe<A>extends Monad<A> {
     /* the method caseOf is inspire by https://github.com/cbowdon/TsMonad */
     caseOf<B>(branch: Maybe.ICaseOf<A,B>): B
@@ -20,10 +18,8 @@ module functional {
     }
   }
 
+
   /*    implements    */
-  export const id = createUnit((monad: Monad<any>, value: any)=> {
-    monad.bind(()=>id(value));
-  });
   export const maybe = createUnit({
     'Maybe': (monad: Maybe<any>, value: any)=> {
       if (isDefined(value)) {
@@ -42,6 +38,7 @@ module functional {
       };
     }
   });
+
 
   /*    utils functions    */
   export const some = maybe;

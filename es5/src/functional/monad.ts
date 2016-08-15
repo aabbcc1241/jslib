@@ -15,6 +15,7 @@ module functional {
   export interface Monad<A> {
     /* chain operation */
     bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B>;
+    wrapAndBind<B>(transform: Transform<A,B>, args?: any[]): Monad<B>;
 
     /* store method */
     [name: string]: Function;
@@ -71,6 +72,12 @@ module functional {
       monad.bind = function bind<B>(transform: Transform<A,Monad<B>>, args?: any[]): Monad<B> {
         return transform(value, ...args);
       };
+      monad.wrapAndBind = function wrapAndBind<B>(transform: Transform<A,B>, args?: any[]): Monad<B> {
+        return monad.bind((a, args)=> {
+          let b = transform(a, ...args);
+          return wrap<B>(b);
+        });
+      };
       monad.toString = function toString(overrideName: string = name): string {
         return `${overrideName}(${value})`;
       };
@@ -88,6 +95,14 @@ module functional {
   }
 
   /*    public util functions    */
+  const _unit = createUnit<any>();
+
+  export function unit<A>(value: A): Monad<A> {
+    return _unit(value)
+  }
+
+  const wrap = unit;
+
   export function isMonad(o: any): boolean {
     return typeof o === 'object' && o[internal.id] === true;
   }
