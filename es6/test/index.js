@@ -50,8 +50,8 @@ testModule('../dist/es6/src/utils-es6', function (u6) {
     console.assert(a.toString() == b.toString(), 'objectClone not working');
     console.assert(typeof u6.require === "object", 'jslib.require does not exist?');
     // var url = 'https://clients5.google.com/pagead/drt/dn/dn.js';
-    var url = 'http://127.0.0.1:8181/horizon/horizon.js';
-    // var url = 'http://yourjavascript.com/8181617142/test.js'; //pure js
+    // var url = 'http://127.0.0.1:8181/horizon/horizon.js';
+    var url = 'http://yourjavascript.com/8181617142/test.js'; //pure js
     // var url = 'http://yourjavascript.com/1287911263/test.js'; //module js
     u6.require.load(url, void 0, eval)
       .then(function () {
