@@ -20,7 +20,7 @@ module functional {
     instanceOf(name: string): boolean;
   }
   export interface M<A> {
-    map<B>(func: Func<A,B>): M<B>;yy
+    map<B>(func: Func<A,B>): M<B>;
 
     /* alias bind, flatmap, chain */
     bind    <B>(func: Func<A,M<B>>): M<B>;
@@ -79,7 +79,8 @@ module functional {
       let monad = <M<A>>Object.create(prototype);
 
       monad.map = function map<B>(func: Func<A,B>): M<B> {
-        return monadMaker(func(value));
+        let mm = <MM<B>><any><MM<A>>monadMaker;
+        return mm(func(value));
       };
 
       monad.bind
