@@ -78,16 +78,16 @@ module functional {
     function unit(value: A): M<A> {
       let monad = <M<A>>Object.create(prototype);
 
-      monad.map = function map<B>(func: Func<A,B>): M<B> {
+      monad.map = function map<B>(func: Func<A,B>, ...args: any[]): M<B> {
         let mm = <MM<B>><any><MM<A>>monadMaker;
-        return mm(func(value));
+        return mm(func(value, ...args));
       };
 
       monad.bind
         = monad.flatmap
         = monad.chain
-        = function bind<B>(func: Func<A,M<B>>): M<B> {
-        return func(value);
+        = function bind<B>(func: Func<A,M<B>>, ...args: any[]): M<B> {
+        return func(value, ...args);
       };
 
       monad.unflat
