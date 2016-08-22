@@ -4,6 +4,125 @@
  * */
 
 module functional {
+  /* alias */
+  export type Type<A> = T<A>;
+  export type Monad<A>=M<A>;
+  export const create_type = def_type;
+  export const t = type;
+  export const def_unit = def_monad;
+  export const create_unit = def_unit;
+  export const create_monad = def_monad;
+
+  /* interfaces */
+  export type Func<A,B>=(a: A, ...args: any[])=>B;
+  export interface T<A> {
+    name(): string;
+    instanceOf(name: string): boolean;
+  }
+  export interface M<A> {
+    map<B>(func: Func<A,B>): M<B>;yy
+
+    /* alias bind, flatmap, chain */
+    bind    <B>(func: Func<A,M<B>>): M<B>;
+    flatmap <B>(func: Func<A,M<B>>): M<B>;
+    chain   <B>(func: Func<A,M<B>>): M<B>;
+
+    /* alias unflat, constructor, unit */
+    unflat      (): MM<A>;
+    constructor (): MM<A>;
+    unit        (): MM<A>;
+  }
+  export interface MM<A> {
+    /* alias unitOf, pure, instance, flat */
+    (a: A): M<A>;
+    unitOf    (a: A): M<A>;
+    pure      (a: A): M<A>;
+    instance  (a: A): M<A>;
+    flat      (a: A): M<A>;
+
+    /* return this */
+    method(name: string, func: Func<A,any>): MM<A>;
+    /* return this */
+    lift(name: string, func: Func<A,M<any>>): MM<A>;
+  }
+
+  module internal {
+    export const monad_plugin_list: Func<M<any>,void>[] = [];
+    export const type_list: {[name: string]: T<any>} = {};
+    export const Prototype = {
+      is_monad: true
+    }
+  }
+
+  /* functions */
+  export function def_type<A>(name: string, impls: string[] = []): T<A> {
+    let res = <T<A>>{};
+    res.name = ()=>name;
+    res.instanceOf = x=>name == x || impls.indexOf(x) != -1;
+    internal.type_list[name] = res;
+    return res;
+  }
+
+  export function type<A>(name: string): T<A> {
+    let res = internal.type_list[name];
+    if (res)
+      return res;
+    else
+      throw new Error(`type ${name} not found`);
+  }
+
+  export function def_monad<A>(): MM<A> {
+    let monadMaker = <MM<A>>{};
+    let prototype = Object.create(internal.Prototype);
+
+    function unit(value: A): M<A> {
+      let monad = <M<A>>Object.create(prototype);
+
+      monad.map = function map<B>(func: Func<A,B>): M<B> {
+        return monadMaker(func(value));
+      };
+
+      monad.bind
+        = monad.flatmap
+        = monad.chain
+        = function bind<B>(func: Func<A,M<B>>): M<B> {
+        return func(value);
+      };
+
+      monad.unflat
+        = monad.constructor
+        = monad.unit
+        = function unflat(): MM<A> {
+        return monadMaker;
+      };
+
+      return monad;
+    }
+
+    monadMaker = <MM<A>>unit;
+    monadMaker.unitOf
+      = monadMaker.pure
+      = monadMaker.instance
+      = monadMaker.flat
+      = unit;
+
+    monadMaker.method = function method(name: string, func: Func<A,any>): MM<A> {
+      let monad = <M<A>>this;
+      prototype[name] = (...args: any[])=>monad.bind(value=>func(value, ...args));
+      return monadMaker;
+    };
+
+    monadMaker.lift = function lift(name: string, func: Func<A,M<any>>): MM<A> {
+      let monad = <M<A>>this;
+      prototype[name] = (...args: any[])=>monad.bind(value=>func(value, ...args));
+      return monadMaker;
+    };
+
+    return monadMaker;
+  }
+
+}
+module functional_old {
   /*    monad interface    */
   export interface Unit<A> {
     (value: A): Monad<A>;

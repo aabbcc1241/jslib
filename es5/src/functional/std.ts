@@ -4,8 +4,9 @@
 
 import {Monad, createUnit, Unit, isMonad, unit} from "./monad";
 import {isDefined} from"../utils-es5";
-
 module functional {
+}
+module functional_old {
   /*    interfaces    */
   export interface Maybe<A>extends Monad<A> {
     /* the method caseOf is inspire by https://github.com/cbowdon/TsMonad */
