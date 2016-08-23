@@ -5,7 +5,7 @@
 
 module functional {
   /* alias */
-  export type Type<A> = T<A>;
+  export type Type<A,B> = T<A,B>;
   export type Monad<A>=M<A>;
   export const create_type = def_type;
   export const t = type;
@@ -15,11 +15,13 @@ module functional {
 
   /* interfaces */
   export type Func<A,B>=(a: A, ...args: any[])=>B;
-  export interface T<A> {
+  export interface T<A,B> {
     name(): string;
+    subType(): T<B,any>;
     instanceOf(name: string): boolean;
+    extend<C,D>(name: string, subType?: T<D,any>, impls?: string[]): T<C,D>;
   }
-  export interface M<A> {
+  export interface M<A> extends T<M<A>,A> {
     map<B>(func: Func<A,B>): M<B>;
 
     /* alias bind, flatmap, chain */
@@ -32,7 +34,7 @@ module functional {
     constructor (): MM<A>;
     unit        (): MM<A>;
   }
-  export interface MM<A> {
+  export interface MM<A> extends T<MM<A>,M<A>> {
     /* alias unitOf, pure, instance, flat */
     (a: A): M<A>;
     unitOf    (a: A): M<A>;
@@ -48,22 +50,30 @@ module functional {
 
   module internal {
     export const monad_plugin_list: Func<M<any>,void>[] = [];
-    export const type_list: {[name: string]: T<any>} = {};
+    export const type_list: {[name: string]: T<any,any>} = {};
     export const Prototype = {
       is_monad: true
     }
   }
 
   /* functions */
-  export function def_type<A>(name: string, impls: string[] = []): T<A> {
-    let res = <T<A>>{};
+  export function def_type<A,B>(name: string, subType: T<B,any> = null, impls: string[] = []): T<A,B> {
+    let res = <T<A,B>>{};
     res.name = ()=>name;
-    res.instanceOf = x=>name == x || impls.indexOf(x) != -1;
-    internal.type_list[name] = res;
+    res.subType = ()=>subType;
+    res.instanceOf = target =>
+    name == target
+    || impls.indexOf(target) != -1
+    || impls.map(typename=>type(typename))
+      .some((parentType: T<any,any>)=>parentType.instanceOf(name));
+    res.extend = function extend<C,D>(res_name: string, res_subType: T<D,any> = subType, res_impls: string[] = []): T<C,D> {
+      res_impls.push(name);
+      return def_type<C,D>(res_name, res_subType, res_impls);
+    };
     return res;
   }
 
-  export function type<A>(name: string): T<A> {
+  export function type<A,B>(name: string): T<A,B> {
     let res = internal.type_list[name];
     if (res)
       return res;
@@ -71,12 +81,19 @@ module functional {
       throw new Error(`type ${name} not found`);
   }
 
-  export function def_monad<A>(): MM<A> {
+  export function def_monad<A>(name: string, subType: T<A,any>, modifier?: (monad: M<A>, value: A)=>void): MM<A> {
     let monadMaker = <MM<A>>{};
     let prototype = Object.create(internal.Prototype);
 
     function unit(value: A): M<A> {
       let monad = <M<A>>Object.create(prototype);
+
+      /* type impl */
+      let type = def_type(name, subType, ['monad']);
+      monad.name = ()=>name;
+      monad.subType = ()=>subType;
+
+      /* self impl */
 
       monad.map = function map<B>(func: Func<A,B>, ...args: any[]): M<B> {
         let mm = <MM<B>><any><MM<A>>monadMaker;
@@ -96,6 +113,9 @@ module functional {
         = function unflat(): MM<A> {
         return monadMaker;
       };
+
+      if (typeof modifier === 'function')
+        modifier(monad, value);
 
       return monad;
     }
@@ -122,6 +142,16 @@ module functional {
     return monadMaker;
   }
 
+  /* configs */
+  export module types {
+    export const type = def_type('type');
+    export const any = def_type('any');
+    def_type('monad_maker', any, ['type']);
+    export const monad = type.extend('monad', any);
+  }
+
+  /* utils */
+  export const unit = create_monad('monad', types.any);
 }
 module functional_old {
   /*    monad interface    */
