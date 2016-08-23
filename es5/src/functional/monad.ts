@@ -59,6 +59,10 @@ module functional {
   /* functions */
   export function def_type<A,B>(name: string, subType: T<B,any> = null, impls: string[] = []): T<A,B> {
     let res = <T<A,B>>{};
+    /* override default methods */
+    let subTypeStr = subType ? subType.name() : 'void 0';
+    res.toString = ()=>`type(${name}<${subTypeStr}>))`;
+    /* self impl */
     res.name = ()=>name;
     res.subType = ()=>subType;
     res.instanceOf = target =>
@@ -85,8 +89,17 @@ module functional {
     let monadMaker = <MM<A>>{};
     let prototype = Object.create(internal.Prototype);
 
+    /* override default methods */
+    let subTypeStr = subType ? subType.name() : 'void 0';
+    monadMaker.toString = ()=>`monad_maker(${name}<${subTypeStr}>)`;
+
+    /* self impl */
+
     function unit(value: A): M<A> {
       let monad = <M<A>>Object.create(prototype);
+
+      /* override default methods */
+      monad.toString = ()=>`${name}(${value})`;
 
       /* type impl */
       let type = def_type(name, subType, ['monad']);

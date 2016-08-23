@@ -74,7 +74,7 @@ testModule('../dist/functional/monad', MONAD=> {
     console.log('i get the value:', x);
     return 'new value';
   });
-  console.log({result: result});
+  console.log({result: result.toString()});
 });
 
 // show('global');
