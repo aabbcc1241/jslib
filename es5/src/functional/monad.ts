@@ -142,6 +142,10 @@ module functional {
     return monadMaker;
   }
 
+  export function is_monad(o: any): boolean {
+    return typeof o === 'object' && o.is_monad === true;
+  }
+
   /* configs */
   export module types {
     export const type = def_type('type');

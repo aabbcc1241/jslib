@@ -39,7 +39,6 @@ testModule('../dist/polyfill', function (polyfill) {
 });
 
 testModule('../dist/functional/monad', function (functional) {
-  return // tmp skip
   console.dir({module: functional});
   assert('isMonad negative', functional.isMonad({}) == false);
   let monad = functional.createUnit()('test');
