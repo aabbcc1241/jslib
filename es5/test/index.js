@@ -77,6 +77,18 @@ testModule('../dist/functional/monad', MONAD=> {
   console.log({result: result.toString()});
 });
 
+testModule('../dist/functional/std', STD=> {
+  let a = STD.maybe('a');
+  let aa = a.map(x=>x.repeat(10));
+  console.log(a.toString());
+  console.log(aa.toString());
+
+  let b = STD.maybe(null);
+  let bb = b.map(x=>x.repeat(10));
+  console.log(b.toString());
+  console.log(bb.toString());
+});
+
 // show('global');
 // show('this');
 
