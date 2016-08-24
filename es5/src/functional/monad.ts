@@ -50,9 +50,9 @@ module functional {
     flat      (a: A): M<A>;
 
     /* return this */
-    method(name: string, func: Func<A,any>): MM<A>;
+    method<B>(name: string, func: Func<A,B>): MM<A>;
     /* return this */
-    lift(name: string, func: Func<A,M<any>>): MM<A>;
+    lift<B>(name: string, func: Func<A,M<B>|B>): MM<A>;
   }
 
   module internal {
@@ -175,15 +175,17 @@ module functional {
     //   = monadMaker.flat
     //   = unit;
 
-    monadMaker.method = function method(name: string, func: Func<A,any>): MM<A> {
+    monadMaker.method = function method<B>(name: string, func: Func<A,B>): MM<A> {
       let monad = <M<A>>this;
-      prototype[name] = (...args: any[])=>monad.bind(value=>func(value, ...args));
+      let f = <Func<A,M<B>>><any><Func<A,B>>func;
+      prototype[name] = (...args: any[])=>monad.bind(value=>f(value, ...args));
       return monadMaker;
     };
 
-    monadMaker.lift = function lift(name: string, func: Func<A,M<any>>): MM<A> {
+    monadMaker.lift = function lift<B>(name: string, func: Func<A,M<B>|B>): MM<A> {
       let monad = <M<A>>this;
-      prototype[name] = (...args: any[])=>monad.bind(value=>func(value, ...args));
+      let mm = <MM<B>><any><MM<A>>monadMaker;
+      prototype[name] = (...args: any[])=>monad.bind(value=>wrapFunc<A,B>(func, mm)(value, ...args));
       return monadMaker;
     };
 
@@ -206,6 +208,15 @@ module functional {
 
   /* utils */
   export const unit = create_monad('monad', types.any);
+
+  export function wrapFunc<A,B>(func: Func<A,M<B>|B>, mm: MM<B>): Func<A,M<B>> {
+    return function (): M<B> {
+      let res = (<Function>func).apply(null, arguments);
+      return is_monad(res)
+        ? res
+        : mm(res);
+    };
+  }
 }
 // module functional_old {
 //   /*    monad interface    */
