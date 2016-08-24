@@ -2,6 +2,7 @@
  * typescript implement of https://github.com/douglascrockford/monad
  * and some more type of monad and utils functions
  * */
+import {objectCopy} from "../utils-es5";
 
 module functional {
   /* alias */
@@ -57,21 +58,34 @@ module functional {
   module internal {
     export const monad_plugin_list: Func<M<any>,void>[] = [];
     export const type_list: {[name: string]: T<any,any>} = {};
-    export const Prototype = <M<any>>{};
+    export const Monad_Prototype = <M<any>>{};
     /* set monad id */
-    Prototype.is_monad = ()=>true;
+    Monad_Prototype.is_monad = ()=>true;
     /* set alias */
-    Prototype.flatmap = <any>function () {
+    Monad_Prototype.flatmap = <any>function () {
       return this.chain(arguments)
     };
-    Prototype.chain = <any>function () {
+    Monad_Prototype.chain = <any>function () {
       return this.bind(arguments)
     };
-    Prototype.constructor = function () {
+    Monad_Prototype.constructor = function () {
       return this.unflat(arguments)
     };
-    Prototype.unit = function () {
+    Monad_Prototype.unit = function () {
       return this.unflat(arguments)
+    };
+    export const Monad_Maker_Prototype = <MM<any>>{};
+    Monad_Maker_Prototype.unitOf = function () {
+      return this(arguments)
+    };
+    Monad_Maker_Prototype.pure = function () {
+      return this(arguments)
+    };
+    Monad_Maker_Prototype.instance = function () {
+      return this(arguments)
+    };
+    Monad_Maker_Prototype.flat = function () {
+      return this(arguments)
     };
   }
 
@@ -106,7 +120,7 @@ module functional {
 
   export function def_monad<A>(name: string, subType: T<A,any>, modifier?: (monad: M<A>, value: A)=>void): MM<A> {
     let monadMaker = <MM<A>>{};
-    let prototype = Object.create(internal.Prototype);
+    let prototype = Object.create(internal.Monad_Prototype);
 
     /* override default methods */
     let subTypeStr = subType ? subType.name() : 'void 0';
@@ -154,11 +168,12 @@ module functional {
     }
 
     monadMaker = <MM<A>>unit;
-    monadMaker.unitOf
-      = monadMaker.pure
-      = monadMaker.instance
-      = monadMaker.flat
-      = unit;
+    objectCopy(internal.Monad_Maker_Prototype, monadMaker);
+    // monadMaker.unitOf
+    //   = monadMaker.pure
+    //   = monadMaker.instance
+    //   = monadMaker.flat
+    //   = unit;
 
     monadMaker.method = function method(name: string, func: Func<A,any>): MM<A> {
       let monad = <M<A>>this;
@@ -176,7 +191,9 @@ module functional {
   }
 
   export function is_monad(o: any): boolean {
-    return typeof o === 'object' && o.is_monad === true;
+    return typeof o === 'object'
+      && typeof o.is_monad === 'function'
+      && o.is_monad() === true;
   }
 
   /* configs */

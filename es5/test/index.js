@@ -70,23 +70,24 @@ testModule('../dist/functional/monad', MONAD=> {
   assert('isMonad (negative)', MONAD.is_monad({}) === false);
   let monad = MONAD.unit('test value');
   assert('isMonad (positive)', MONAD.is_monad(monad));
+  let bind_test = false;
   let result = monad.map(x=> {
-    console.log('i get the value:', x);
+    bind_test = x == 'test value';
     return 'new value';
   });
-  console.log({result: result.toString()});
+  assert('bind test', bind_test);
+  result.bind(x=>assert('bind result', x == 'new value'))
 });
 
 testModule('../dist/functional/std', STD=> {
   let a = STD.maybe('a');
   let aa = a.map(x=>x.repeat(10));
-  console.log(a.toString());
-  console.log(aa.toString());
 
   let b = STD.maybe(null);
   let bb = b.map(x=>x.repeat(10));
-  console.log(b.toString());
-  console.log(bb.toString());
+
+  assert('maybe (positive)', aa.isSome());
+  assert('maybe (negative)', bb.isNone());
 });
 
 // show('global');
