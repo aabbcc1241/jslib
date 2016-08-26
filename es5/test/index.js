@@ -93,23 +93,29 @@ testModule('../dist/functional/monad', MONAD=> {
       .method('valueOf', (a)=>a)
     ;
   let calc = math(2);
-  // console.log({calc: calc.toString()});
   let res = calc
       .plus(2)
       .times(3)
     ;
-  // console.log({res: res.toString()});
   res.map(x=>assert('custom lift', x == 12));
   assert('custom method', res.valueOf() == 12);
 });
 
 testModule('../dist/functional/std', STD=> {
+  STD.maybe.method('value', x=>x);
   let a = STD.maybe('a');
   let aa = a.map(x=>x.repeat(10));
 
   let b = STD.maybe(null);
   let bb = b.map(x=>x.repeat(10));
 
+  console.log({aa: aa.toString()});
+  console.log({
+    bb: bb.toString()
+    , isSome: bb.isSome()
+    , isNone: bb.isNone()
+    , value: bb.value()
+  });
   assert('maybe (positive)', aa.isSome());
   assert('maybe (negative)', bb.isNone());
 
