@@ -140,10 +140,7 @@ module functional {
       monad.subType = ()=>subType;
 
       /* self impl */
-      monad.bind
-        // = monad.flatmap
-        // = monad.chain
-        = function bind<B>(func: Func<A,M<B>>, ...args: any[]): M<B> {
+      monad.bind = function bind<B>(func: Func<A,M<B>>, ...args: any[]): M<B> {
         return func(value, ...args);
       };
 
@@ -154,10 +151,7 @@ module functional {
         return mm(b);
       };
 
-      monad.unflat
-        // = monad.constructor
-        // = monad.unit
-        = function unflat(): MM<A> {
+      monad.unflat = function unflat(): MM<A> {
         return monadMaker;
       };
 
