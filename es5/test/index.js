@@ -72,23 +72,64 @@ testModule('../dist/functional/monad', MONAD=> {
   assert('is_monad (negative)', MONAD.is_monad({}) === false);
   let monad = MONAD.unit('test value');
   assert('is_monad (positive)', MONAD.is_monad(monad));
+  let bind_test = false;
   let result = monad.map(x=> {
-    console.log('i get the value:', x);
+    bind_test = x == 'test value';
     return 'new value';
   });
-  console.log({result: result.toString()});
+  assert('bind test', bind_test);
+  result.bind(x=>assert('bind result', x == 'new value'));
+
+  let number = MONAD.def_type('number', null);
+  assert('def_type', number);
+
+  /* custom math monad test */
+  let math = MONAD.create_unit('math', number)
+      .lift('plus', (a, b)=> a + b)
+      .lift('sub', (a, b)=>a - b)
+      .lift('times', (a, b)=>a * b)
+      .lift('div', (a, b)=>a / b)
+      .lift('mod', (a, b)=>a % b)
+      .method('valueOf', (a)=>a)
+    ;
+  let calc = math(2);
+  // console.log({calc: calc.toString()});
+  let res = calc
+      .plus(2)
+      .times(3)
+    ;
+  // console.log({res: res.toString()});
+  res.map(x=>assert('custom lift', x == 12))
 });
 
 testModule('../dist/functional/std', STD=> {
   let a = STD.maybe('a');
   let aa = a.map(x=>x.repeat(10));
-  console.log(a.toString());
-  console.log(aa.toString());
 
   let b = STD.maybe(null);
   let bb = b.map(x=>x.repeat(10));
-  console.log(b.toString());
-  console.log(bb.toString());
+
+  assert('maybe (positive)', aa.isSome());
+  assert('maybe (negative)', bb.isNone());
+
+  let as = false;
+  a.caseOf({
+    some: x=> {
+      console.log({a: 'some'});
+      as = true;
+    },
+    none: ()=>console.log({a: 'none'})
+  });
+  let bs = false;
+  b.caseOf({
+    some: x=>console.log({b: 'some'}),
+    none: ()=> {
+      console.log({b: 'none'});
+      bs = true;
+    }
+  });
+  assert('maybe.caseOf (some)', as);
+  assert('maybe.caseOf (none)', bs);
 });
 
 // show('global');
