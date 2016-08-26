@@ -99,7 +99,8 @@ testModule('../dist/functional/monad', MONAD=> {
       .times(3)
     ;
   // console.log({res: res.toString()});
-  res.map(x=>assert('custom lift', x == 12))
+  res.map(x=>assert('custom lift', x == 12));
+  assert('custom method', res.valueOf() == 12);
 });
 
 testModule('../dist/functional/std', STD=> {

@@ -171,9 +171,11 @@ module functional {
     objectCopy(internal.Monad_Maker_Prototype, monadMaker);
 
     monadMaker.method = function method<B>(name: string, func: Func<A,B>): MM<A> {
-      let monad = <M<A>>this;
       let f = <Func<A,M<B>>><any><Func<A,B>>func;
-      prototype[name] = (...args: any[])=>monad.bind(value=>f(value, ...args));
+      prototype[name] = function (...args: any[]) {
+        let monad = <M<A>>this;
+        return monad.bind(value=>f(value, ...args))
+      };
       return monadMaker;
     };
 
