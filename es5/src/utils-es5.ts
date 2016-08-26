@@ -149,6 +149,12 @@ module jslib {
     return Array.prototype.slice.call(o);
   }
 
+  export function same_array(as: any[], bs: any[]): boolean {
+    if (!Array.isArray(as) && Array.isArray(bs))
+      throw new Error('as or bs is not Array');
+    return as.length == bs.length && as.every((a, i)=>a == bs[i])
+  }
+
   /* just syntax sugar */
   export function cast<A>(x: any): A {
     return x;
