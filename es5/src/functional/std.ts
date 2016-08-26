@@ -7,6 +7,7 @@ import {isDefined} from"../utils-es5";
 module functional {
 
   /* interfaces */
+  export type Gen<A>=()=>A;
   export interface Maybe<A> extends M<A> {
     isSome(): boolean;
     isNone(): boolean;
@@ -18,7 +19,7 @@ module functional {
       none: ()=>B
     }
   }
-  export interface IO<A>extends M<A> {
+  export interface IO<A extends Gen<A>>extends M<A> {
     do(): A;
   }
 
@@ -38,15 +39,11 @@ module functional {
       ? branch.some(value)
       : branch.none();
   });
-  export const io = def_monad('io', (monad, value)=> {
-    monad.bind =
-      function bind<B>(func: Func<any,M<B>>, ...args: any[]): IO<B> {
-        throw new Error('not impl');
-      }
-  });
+  export const io = def_monad('io', (monad: IO<any>, value: Gen<any>)=> {
+  }).method('do', f=>f());
 
   /* functions */
-  export function do_<A>(io: IO<A>): M<A> {
+  export function do_<A extends Gen<A>>(io: IO<A>): M<A> {
     //TODO turn into promise?
     return unit<A>(io.do());
   }

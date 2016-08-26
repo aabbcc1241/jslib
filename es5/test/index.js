@@ -68,7 +68,6 @@ testModule('../dist/polyfill', polyfill=> {
 });
 
 testModule('../dist/functional/monad', MONAD=> {
-  // console.dir({MONAD: MONAD});
   assert('is_monad (negative)', MONAD.is_monad({}) === false);
   let monad = MONAD.unit('test value');
   assert('is_monad (positive)', MONAD.is_monad(monad));
@@ -102,6 +101,7 @@ testModule('../dist/functional/monad', MONAD=> {
 });
 
 testModule('../dist/functional/std', STD=> {
+  /* test maybe */
   STD.maybe.method('value', x=>x);
   let a = STD.maybe('a');
   let aa = a.map(x=>x.repeat(10));
@@ -109,13 +109,6 @@ testModule('../dist/functional/std', STD=> {
   let b = STD.maybe(null);
   let bb = b.map(x=>x.repeat(10));
 
-  console.log({aa: aa.toString()});
-  console.log({
-    bb: bb.toString()
-    , isSome: bb.isSome()
-    , isNone: bb.isNone()
-    , value: bb.value()
-  });
   assert('maybe (positive)', aa.isSome());
   assert('maybe (negative)', bb.isNone());
 
@@ -137,6 +130,13 @@ testModule('../dist/functional/std', STD=> {
   });
   assert('maybe.caseOf (some)', as);
   assert('maybe.caseOf (none)', bs);
+
+  /* test io */
+  let work = STD.io(()=>1);
+  work.bind(x=>assert('io type', typeof x === 'function'));
+  let res = work.do();
+  assert('io result', res == 1);
+  let workComplex=work;
 });
 
 // show('global');
