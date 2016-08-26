@@ -136,7 +136,28 @@ testModule('../dist/functional/std', STD=> {
   work.bind(x=>assert('io type', typeof x === 'function'));
   let res = work.do();
   assert('io result', res == 1);
-  let workComplex=work;
+
+
+  let real_world = [];
+
+  function side_effect(x) {
+    real_world.push(x);
+    return x;
+  }
+
+  const MONAD = require('../dist/functional/monad');
+  let complexWork = work
+      .map(x=>side_effect(x + 2))
+      .map(x=>side_effect(x * 2))
+    ;
+  assert('io map result', MONAD.is_monad(complexWork));
+  complexWork.do();
+  complexWork.do();
+  function same_array(as, bs) {
+    return as.every((a, i)=>a == bs[i])
+  }
+
+  assert('io map effect', same_array(real_world, [3, 6, 3, 6]));
 });
 
 // show('global');

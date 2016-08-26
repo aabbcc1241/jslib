@@ -8,6 +8,7 @@ module functional {
 
   /* interfaces */
   export type Gen<A>=()=>A;
+  // export interface Gen<A>{():A}
   export interface Maybe<A> extends M<A> {
     isSome(): boolean;
     isNone(): boolean;
@@ -28,7 +29,7 @@ module functional {
   }
 
   /* impls */
-  export const maybe = def_monad('maybe', (monad: Maybe<any>, value: any)=> {
+  export const maybe = def_monad<Maybe<any>>('maybe', (monad: Maybe<any>, value: any)=> {
     if (!isDefined(value)) {
       monad.bind = ()=>monad;
       monad.map = monad.bind;
@@ -39,7 +40,10 @@ module functional {
       ? branch.some(value)
       : branch.none();
   });
-  export const io = def_monad('io', (monad: IO<any>, value: Gen<any>)=> {
+  export const io = def_monad<IO<Gen<any>>>('io', (monad: IO<any>, value: Gen<any>)=> {
+    monad.map = function map<B extends Gen<B>>(func: Func<any,B>, ...args: any[]): IO<B> {
+      return <IO<B>><M<B>>io(()=>func(value(), ...args));
+    };
   }).method('do', f=>f());
 
   /* functions */
