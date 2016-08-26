@@ -19,7 +19,8 @@ function assert(name, result) {
   console.assert(result, 'failed test: ' + name);
   console.log('passed test: ' + name);
 }
-var testModuleList = [];
+let testModuleList = [];
+let failed = [];
 function testModule(name, func) {
   testModuleList.push(new Promise(function (resolve, reject) {
     console.log();
@@ -39,6 +40,7 @@ function testModule(name, func) {
     } catch (e) {
       console.error('fail', ':', name);
       console.error(e);
+      failed.push(name);
       reject(name);
     }
     console.log();
@@ -67,9 +69,9 @@ testModule('../dist/polyfill', polyfill=> {
 
 testModule('../dist/functional/monad', MONAD=> {
   // console.dir({MONAD: MONAD});
-  assert('isMonad (negative)', MONAD.is_monad({}) === false);
+  assert('is_monad (negative)', MONAD.is_monad({}) === false);
   let monad = MONAD.unit('test value');
-  assert('isMonad (positive)', MONAD.is_monad(monad));
+  assert('is_monad (positive)', MONAD.is_monad(monad));
   let result = monad.map(x=> {
     console.log('i get the value:', x);
     return 'new value';
@@ -95,7 +97,12 @@ testModule('../dist/functional/std', STD=> {
 Promise.resolve.apply(Promise, testModuleList)
   .then(function () {
     console.log();
-    console.log('test ' + testname + ' end, all success');
+    if (failed.length == 0) {
+      console.log('test ' + testname + ' end, all success');
+    } else {
+      console.log(`test ${testname} end, some failed (${failed})`);
+      process.exit(1);
+    }
   })
   .catch(function (name) {
     console.log();
