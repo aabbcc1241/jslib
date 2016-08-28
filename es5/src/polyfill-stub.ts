@@ -15,17 +15,20 @@ module jslib {
     head(): T;
     tail(): RichArray<T>;
     last(): T;
+    contains(searchElement: T, fromIndex?: number): boolean;
   }
 
   export var RichArray = <{
     prototype: RichArray<any>,
   }> <any> NativeArray;
 
-  /* ensure the element type is same */
+  /** ensure the element type is same
+   * @deprecated **/
   export function castRichArray<T>(arr: T[]|RichArray<T>): RichArray<T> {
     return <RichArray<T>>arr;
   }
 
+  /** @deprecated **/
   export function EmptyArray<T>(): RichArray<T> {
     return <RichArray<T>>[];
   }
@@ -41,5 +44,10 @@ module jslib {
     toArray(): RichArray<RichHTMLElement>
   }
   export var RichHTMLCollection = <{prototype: RichHTMLCollection}> <any> NativeHTMLCollection;
+
+  export interface RichString extends String {
+    contains(searchString: string, position?: number): boolean;
+  }
+  export var RichString = <{prototype: RichString}><any>String;
 }
 export = jslib;

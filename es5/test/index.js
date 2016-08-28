@@ -65,6 +65,16 @@ testModule('../dist/polyfill', polyfill=> {
   assert('Array.prototype.pushIfNotExist', arr.length == 2);
   arr.clear();
   assert('Array.prototype.clear', arr.length == 0);
+
+  assert('Array.contains (prototype)', typeof Array.prototype.contains === 'function');
+  arr = [1, 2, 3];
+  assert('Array.contains (positive)', arr.contains(2));
+  assert('Array.contains (negative)', !arr.contains(4));
+
+  assert('String.contains (prototype)', typeof String.prototype.contains === 'function');
+  let s = '123';
+  assert('String.contains (positive)', s.contains(2));
+  assert('String.contains (negative)', !s.contains(4));
 });
 
 testModule('../dist/functional/monad', MONAD=> {

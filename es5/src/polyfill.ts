@@ -1,5 +1,5 @@
 import {JsMap} from "./utils-es5"
-import {RichArray, RichHTMLElement, RichHTMLCollection, castRichArray, EmptyArray} from "./polyfill-stub";
+import {RichArray, RichHTMLElement, RichHTMLCollection, castRichArray, EmptyArray, RichString} from "./polyfill-stub";
 
 /* avoid filling on nodejs server */
 if (typeof window !== "undefined") {
@@ -103,12 +103,14 @@ RichArray.prototype.last = function () {
   return this[this.length - 1];
 };
 
+RichArray.prototype.contains = function contains<T>(searchElement: T, fromIndex?: number): boolean {
+  return (<RichArray<T>>this).indexOf(searchElement, fromIndex) != -1;
+};
+
+RichString.prototype.contains = function contains(searchString: string, position?: number): boolean {
+  return (<String>this).indexOf(searchString, position) != -1;
+};
+
 module jslib {
-  // /* tunneling the alias from parent, to avoid importing the parent
-  //  * the parent is logically private, but nodejs module doesn't not support the logic */
-  // /* does not work? */
-  // export var Array = RichArray;
-  // export var HTMLElement = RichHTMLElement;
-  // export var HTMLCollection = RichHTMLCollection;
 }
 export = jslib;
