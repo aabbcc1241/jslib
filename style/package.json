@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "node-sass": "^3.8.0",
+    "npm-run-all": "^3.0.0",
     "shx": "^0.1.4"
   },
   "dependencies": {},

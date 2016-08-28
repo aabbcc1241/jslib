@@ -22,7 +22,7 @@
     "url": "git+https://github.com/beenotung/jslib.git"
   },
   "devDependencies": {
-    "npm-run-all": "^2.3.0",
+    "npm-run-all": "^3.0.0",
     "onchange": "^2.5.0",
     "shx": "^0.1.2",
     "typescript": "^1.8.10",
