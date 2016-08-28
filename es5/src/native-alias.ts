@@ -6,7 +6,7 @@ module jslib {
   export type NativeArray<T> = Array<T>;
   export var NativeArray = Array;
 
-  var window:Window;
+  var window: Window;
 
   function dummy() {
     return {prototype: {}}
