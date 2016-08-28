@@ -173,7 +173,8 @@ testModule('../dist/functional/std', STD=> {
 // show('global');
 // show('this');
 
-Promise.resolve.apply(Promise, testModuleList)
+// Promise.resolve.apply(Promise, testModuleList)
+Promise.all(testModuleList)
   .then(function () {
     console.log();
     if (failed.length == 0) {

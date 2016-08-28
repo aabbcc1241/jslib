@@ -135,10 +135,6 @@ module jslib {
     });
   }
 
-  export function resolveOnce<A>(promise: Promise<A>): AsyncLazy<A> {
-    return new AsyncLazy(()=>promise);
-  }
-
   export class AsyncLazy<T> {
     private fun: Producer<Promise<T>>;
     private promise: Promise<T>;

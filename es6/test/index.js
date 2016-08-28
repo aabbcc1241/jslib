@@ -7,15 +7,20 @@ const testname = 'jslib-es6';
 console.log('test ' + testname + ' start');
 console.log();
 
-function show(x) {
+function show(x, scopedEval = eval) {
   var msg = {};
-  if (eval('typeof ' + x) === 'undefined')
+  if (scopedEval('typeof ' + x) === 'undefined')
     msg[x] = undefined;
   else
-    msg[x] = eval(x);
+    msg[x] = scopedEval(x);
   console.log(msg);
 }
-var testModuleList = [];
+function assert(name, result) {
+  console.assert(result, 'failed test: ' + name);
+  console.log('passed test: ' + name);
+}
+let testModuleList = [];
+let failed = [];
 function testModule(name, func) {
   testModuleList.push(new Promise(function (resolve, reject) {
     console.log();
@@ -35,86 +40,105 @@ function testModule(name, func) {
     } catch (e) {
       console.error('fail', ':', name);
       console.error(e);
+      failed.push(name);
       reject(name);
     }
     console.log();
   }));
 }
 
+testModule('../dist/es6/src/utils-es6', function (jslib) {
+  let defer = jslib.defer();
+  try {
+    let a = {a: 1};
+    let b = jslib.objectClone(a);
+    assert('objectClone', a.toString() == b.toString());
 
-show('Horizon');
-testModule('../dist/es6/src/utils-es6', function (u6) {
-  return new Promise(function (resolve, reject) {
-    var a = {a: 1};
-    var b = u6.objectClone(a);
-    console.assert(a.toString() == b.toString(), 'objectClone not working');
-    console.assert(typeof u6.require === "object", 'jslib.require does not exist?');
+    let later = jslib.defer();
+    let run_count = 0;
+    const value = 'defered value';
+    later.promise.then(x=> {
+      assert('defer (run count)', run_count == 0);
+      assert('defer (value)', x == value);
+      run_count++;
+    });
+    later.resolve(value);
+    Promise.resolve(later.promise).then(x=>assert('defer (first resolve value)', x == value));
+    Promise.resolve(later.promise).then(x=>assert('defer (second resolve value)', x == value));
+
     // var url = 'https://clients5.google.com/pagead/drt/dn/dn.js';
     // var url = 'http://127.0.0.1:8181/horizon/horizon.js';
     var url = 'http://yourjavascript.com/8181617142/test.js'; //pure js
     // var url = 'http://yourjavascript.com/1287911263/test.js'; //module js
-    u6.require.load(url, void 0, eval)
-      .then(function () {
-        console.log('loaded js file');
-        try {
-          // console.assert(typeof test === 'function', 'test function inside the required js file is not loading successful?');
-          // console.log('test function', test.toString());
-          show('Horizon');
-          resolve();
-        } catch (e) {
-          console.error('falied to handle load result', e);
-          reject(e)
-        }
+    let url_defer = jslib.defer();
+    jslib.require.load(url, void 0, eval)
+      .then(()=> {
+        assert('JsRequire (load)', true);
+        /* the loaded js file should define a function named test */
+        assert('JsRequire (effect)', typeof test === 'function');
+        url_defer.resolve();
       })
-      .catch(function (error) {
-        console.error('load failed', ':', error);
-        reject(error);
+      .catch((e)=> {
+        assert('JsRequire', false);
+        url_defer.reject(e);
       });
-    console.log('creating an defer');
-    var defer = u6.defer();
-    defer.promise.then(x=>console.log({deferValue: {x}}));
-    defer.resolve('this is defered value');
-    Promise.resolve(defer.promise).then(x=>console.log({d1: x}));
-    Promise.resolve(defer.promise).then(x=>console.log({d2: x}));
 
     /* async lazy */
+    let async_lazy_defer = jslib.defer();
+    let hard_run_count = 0;
+    let hard_val = 'this value is very hard to get';
+
     function hardFunc() {
-      let defer = u6.defer();
-      console.log('calculating very hard.....');
+      hard_run_count++;
+      let defer = jslib.defer();
       setTimeout(()=> {
-        defer.resolve('this value is very hard to get')
+        defer.resolve(hard_val);
       }, 100);
       return defer.promise;
     }
 
-    var hard = new u6.AsyncLazy(hardFunc);
-    hard.get().then(x=>console.log({hard1: x}));
-    hard.get().then(x=>console.log({hard2: x}));
-    hard.get().then(x=>console.log({hard3: x}));
-    console.log({hard: hard, get: hard.get()});
+    let hard = new jslib.AsyncLazy(hardFunc);
+    hard.get().then(x=> {
+      assert('AsyncLazy (1st get)', x == hard_val);
+    }).catch(async_lazy_defer.reject);
+    hard.get().then(x=> {
+      assert('AsyncLazy (2nd get)', x == hard_val);
+      assert('AsyncLazy (run count)', hard_run_count == 1);
+      async_lazy_defer.resolve();
+    }).catch(async_lazy_defer.reject);
 
     /* lazy */
-    var lazy = new u6.Lazy(function () {
-      console.log('doing lazy stuff......');
-      return 'finished lazy stuff';
+    let lazy_val = 'lazy result';
+    let lazy_run_count = 0;
+    let lazy = new jslib.Lazy(()=> {
+      lazy_run_count++;
+      return lazy_val;
     });
-    console.log({lazy1: lazy.get()});
-    console.log({lazy2: lazy.get()});
-    console.log({lazy3: lazy.get()});
+    assert('lazy (1st get)', lazy.get() == lazy_val);
+    assert('lazy (2nd get)', lazy.get() == lazy_val);
+    assert('lazy (run count)', lazy_run_count == 1);
 
-    /* resolve once */
-    console.log('loading web page');
-    var fetch = require('node-fetch');
-    var cachedWebpage = u6.resolveOnce(fetch('http://www.google.com').then(x=>x.status));
-    cachedWebpage.get().then(x=>console.log({'view page 1': x}));
-    cachedWebpage.get().then(x=>console.log({'view page 2': x}));
-  });
+    Promise.all([
+      url_defer.promise
+      , async_lazy_defer.promise
+    ])
+      .then(defer.resolve)
+      .catch(defer.reject);
+  } catch (e) {
+    defer.reject(e);
+  }
+  return defer.promise;
 });
 
 Promise.resolve.apply(Promise, testModuleList)
   .then(function () {
     console.log();
-    console.log('test ' + testname + ' end, all success');
+    if (failed.length == 0) {
+      console.log('test ' + testname + ' end, all success');
+    } else {
+      console.log(`test ${testname} end, some failed (${failed})`);
+      process.exit(1);
+    }
   })
   .catch(function (name) {
     console.log();

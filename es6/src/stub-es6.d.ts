@@ -5,9 +5,9 @@
  * Created by beenotung on 5/28/16.
  */
 
-declare interface ObjectConstructor {
-  assign(_this:any, ...that:any[]):void;
-}
+// declare interface ObjectConstructor {
+//   assign(_this:any, ...that:any[]):void;
+// }
 
 declare interface Window {
   unescape(html_code:string):string;
