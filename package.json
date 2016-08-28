@@ -29,7 +29,7 @@
   "dependencies": {},
   "scripts": {
     "--------------------------------install": "",
-    "install": "run-p install-es5 install-es6 install-style",
+    "install": "run-s install-es5 install-es6 install-style",
     "--------------------------------dep": "",
     "install-es5": "cd es5 && npm install",
     "install-es6": "cd es6 && npm install",
@@ -45,7 +45,7 @@
     "--------------------------------dep-hook": "",
     "--------------------------------main": "",
     "clean": "run-p clean-es5 clean-es6 clean-style",
-    "build": "run-p build-es5 build-es6 build-style",
+    "build": "run-s build-es5 build-es6 build-style",
     "test": "node test",
     "--------------------------------main-hook": "",
     "pretest": "run-s test-es5 test-es6",
