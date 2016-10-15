@@ -226,6 +226,12 @@ module jslib {
     }
   }
 
+  export module Random {
+    export function nextInt(range: number = 1, offset = 0): number {
+      return offset + Math.round(Math.random() * range);
+    }
+  }
+
   /** not the same as Map in ES6 */
   export class JsMap<V> {
     private map: {
