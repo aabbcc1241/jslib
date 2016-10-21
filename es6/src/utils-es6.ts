@@ -16,7 +16,7 @@ module jslib {
     const cached = new Set<string>();
 
     /**@return file extension*/
-    async function checkSource(url: string, cors: boolean): Promise<[string,string]> {
+    async function checkSource(url: string, cors: boolean): Promise<string> {
       if (url.indexOf('.') == -1)
         throw new URIError('no sub-filename detected');
       let option = <RequestInit>{
@@ -28,21 +28,24 @@ module jslib {
       if (text.length == 0) {
         throw new TypeError('empty file')
       } else {
-        return <[string,string]>[url.split('.').pop(), text];
+        return text;
       }
     }
 
-    async function injectSource(url: string, cors: boolean, scopedEval?: (code: string)=>void): Promise<string> {
-      let [filetype,filecontent] = await checkSource(url, cors);
+    async function injectSource(url: string, cors: boolean, skipCheck: boolean, scopedEval?: (code: string)=>void): Promise<string> {
+      let filetype = url.split('.').pop();
+      let filecontent: string;
+      if (!skipCheck || typeof window === 'undefined') {
+        filecontent = await checkSource(url, cors);
+      }
       return new Promise((resolve: NOOP, reject: NOOP)=> {
         if (typeof window === 'undefined')
           if (filetype == 'js') {
-            let result: any;
             if (scopedEval)
               scopedEval(filecontent);
             else
               eval(filecontent);
-            resolve(result);
+            resolve(filecontent);
           }
           else
             reject(new TypeError('invalid file type (server side nodejs) :' + filetype));
@@ -68,7 +71,7 @@ module jslib {
       });
     }
 
-    export function load(url: string, cors = false, scopedEval: (code: string)=>void) {
+    export function load(url: string, cors = false, skipCheck = false, scopedEval?: (code: string)=>void) {
       /* check if in nodejs or browser */
       return new Promise((resolve: NOOP, reject: NOOP)=> {
         if (cached.has(url)) {
@@ -79,7 +82,7 @@ module jslib {
           } else {
             let xss = [<PendingCallback>[resolve, reject]];
             pending.set(url, xss);
-            injectSource(url, cors, scopedEval)
+            injectSource(url, cors, skipCheck, scopedEval)
               .then((code?: string)=> {
                 cached.add(url);
                 xss.forEach(xs=>xs[0](code));
