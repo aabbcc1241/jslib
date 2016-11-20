@@ -142,7 +142,7 @@ module jslib {
     if (isNumber(s))
       return new Number(s).valueOf();
     else
-      throw new TypeError("s is not a number");
+      throw new TypeError("param is not a number:" + s);
   }
 
   export function toArray<A>(o: any): Array<A> {
